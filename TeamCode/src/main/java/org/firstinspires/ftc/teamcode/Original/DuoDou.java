@@ -32,28 +32,49 @@ package org.firstinspires.ftc.teamcode.Original;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name="Vuforia Streamlined", group ="Concept")
-public class DuoDou extends LinearOpMode {
+import org.firstinspires.ftc.teamcode.Original.detectors.ImageDetector;
+import org.firstinspires.ftc.teamcode.Original.detectors.OpencvDetector;
+import org.firstinspires.ftc.teamcode.Original.detectors.StoneDetector;
 
-    @Override
+@TeleOp(name="The Three <<Holy Systems>>", group ="Primordial Artifact")
+public class DuoDou extends LinearOpMode{
+
     public void runOpMode() {
 
         telemetry.setAutoClear(true);
 
         ImageDetector detector = new ImageDetector(this, false);
         StoneDetector stone = new StoneDetector(detector, this, true);
+        OpencvDetector foundation = new OpencvDetector(detector, this);
 
-        stone.start();
-        detector.start();
+        //stone.start();
+        //detector.start();
+        foundation.start();
 
         while (!isStopRequested()) {
-            detector.getposition();
-            detector.printposition();
+            detector.updateposition();
+            detector.printposition(detector.getposition());
+
+            foundation.updateObjects();
+            foundation.print(foundation.getObjects());
+
+            stone.updateObjects();
+            stone.print(stone.getObjects());
+
+            telemetry.update();
         }
 
         // Disable Tracking when we are done;
         detector.stop();
         stone.stop();
+        foundation.stop();
     }
 
+    public void delay(Long time){
+        Long start = System.currentTimeMillis();
+
+        while(System.currentTimeMillis()-start<time){
+           //wait
+        }
+    }
 }

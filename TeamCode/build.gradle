@@ -1,4 +1,5 @@
-//
+dependencies {
+}//
 // build.gradle in TeamCode
 //
 // Most of the definitions for building your module reside in a common, shared

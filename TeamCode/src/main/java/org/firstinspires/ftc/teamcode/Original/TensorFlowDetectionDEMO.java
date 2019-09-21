@@ -33,6 +33,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.Original.detectors.ImageDetector;
+import org.firstinspires.ftc.teamcode.Original.detectors.StoneDetector;
 
 import java.util.List;
 
@@ -55,7 +57,7 @@ public class TensorFlowDetectionDEMO extends LinearOpMode {
             //get recognitions
             List<Recognition> updatedRecognitions = stone.getObjects();
 
-            if (updatedRecognitions != null) continue;
+            if (updatedRecognitions == null) continue;
 
             // step through the list of recognitions and display boundary info.
             for (Recognition recognition : updatedRecognitions) {
@@ -73,7 +75,6 @@ public class TensorFlowDetectionDEMO extends LinearOpMode {
             telemetry.update();
         }
 
-        //the ftcapp cannot stop the TFod thread! YOU must do it.
         stone.stop();
 
     }
