@@ -23,15 +23,26 @@ public class OpencvDetector implements Detector {
         //OR System.LoadLibrary("opencv_java3");
     }
 
-    OpMode opMode;
-    HardwareMap hardwareMap;
-    Telemetry telemetry;
+    private OpMode opMode;
+    HardwareMap   hardwareMap;
+    Telemetry     telemetry;
     ImageDetector vuforia;
 
     private Bitmap image; //raw image for camera
     private Mat Matimage; //image converted to OpenCV Mat
     Point FoundationLocation; //point of detected foundation
     int prevlength=0;//TODO testing purposes
+
+    volatile boolean activated=false;
+
+    Thread run = new Thread(){
+        @Override
+        public void run() {
+            while (activated){
+                updateObjects();
+            }
+        }
+    };
 
     public OpencvDetector (ImageDetector vuforia, OpMode opMode){
         this.opMode = opMode;
@@ -43,16 +54,16 @@ public class OpencvDetector implements Detector {
 
     //for future interface
     public void start(){
-
+        activated=true;
+        run.start();
     }
     /**
      * hold the phone as you would use it to scroll reddit
      * x: 0 at the top, increases as you go down
      * y: 0 at the right, increases as you go left
     */
-    public void updateObjects(){
+    private void updateObjects(){
         //get raw image
-        vuforia.updateImage();
         image = vuforia.getImage();
 
         //raw to Mat
@@ -82,14 +93,17 @@ public class OpencvDetector implements Detector {
         FoundationLocation = fin.clone();
     }
 
-    //TODO
+    /**
+     * will be null if not available
+     * @return
+     */
     public Point getObjects(){
 
         return FoundationLocation;
     }
 
     public void stop() {
-
+        activated=false;
     }
 
     public void print(Point im){

@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.Original.detectors;
 
-import android.database.DatabaseErrorHandler;
 import android.graphics.Bitmap;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -71,6 +70,17 @@ public class ImageDetector {
     //list of trackable types
     VuforiaTrackables allTrackables;
 
+    volatile boolean activated=false;
+
+    Thread run = new Thread(){
+        @Override
+        public void run() {
+            while (activated){
+                updateposition();
+            }
+        }
+    };
+
     public ImageDetector(OpMode opMode, boolean useDisplay) {
 
         this.opMode = opMode;
@@ -93,23 +103,28 @@ public class ImageDetector {
         for (VuforiaTrackable trackable : allTrackables) {
             allTrackables.activate();
         }
+
+        activated=true;
+        run.start();;
     }
 
     public void stop() {
+        activated=false;
+
         for (VuforiaTrackable trackable : allTrackables) {
             allTrackables.deactivate();
         }
     }
 
     /**
-     * Will be null if unavailable or same
+     * Will be null if unavailable
      * @return
      */
     public OpenGLMatrix getposition(){
         return Location;
     }
 
-    public void updateposition() {
+    private void updateposition() {
         List<VuforiaTrackable> ret = new ArrayList<VuforiaTrackable>();
 
         for (VuforiaTrackable trackable : allTrackables) {
@@ -128,8 +143,6 @@ public class ImageDetector {
                 OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
                 if (robotLocationTransform != null) {
                     Location = robotLocationTransform;
-                }else{
-                    Location =null;
                 }
                 break;//we can only work with one position, for now
             }
@@ -141,10 +154,12 @@ public class ImageDetector {
      * @return Bitmap that will be null if image unavailable
      */
     public Bitmap getImage(){
+        updateImage();
+
         return cameraraw;
     }
 
-    public void updateImage(){
+    private void updateImage(){
         cameraraw = null;
 
         try {
@@ -217,7 +232,7 @@ public class ImageDetector {
         return vuforia;
     }
 
-    public void setuptrackables(VuforiaTrackables targetsSkyStone) {
+    private void setuptrackables(VuforiaTrackables targetsSkyStone) {
         // Load the data sets for the trackable objects. These particular data
         // sets are stored in the 'assets' part of our application.
 
