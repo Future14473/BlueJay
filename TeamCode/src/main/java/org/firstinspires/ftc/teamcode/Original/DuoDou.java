@@ -52,13 +52,10 @@ public class DuoDou extends LinearOpMode{
         foundation.start();
 
         while (!isStopRequested()) {
-            detector.updateposition();
             detector.printposition(detector.getposition());
 
-            foundation.updateObjects();
             foundation.print(foundation.getObjects());
 
-            stone.updateObjects();
             stone.print(stone.getObjects());
 
             telemetry.update();

@@ -18,6 +18,16 @@ public class StoneDetector implements Detector {
     private Telemetry telemetry;
 
     List<Recognition> objects;
+    volatile boolean activated=false;
+
+    Thread run = new Thread(){
+        @Override
+        public void run() {
+            while (activated){
+                updateObjects();
+            }
+        }
+    };
 
     public StoneDetector(ImageDetector imager, OpMode opMode, boolean useDisplay){
         this.opMode=opMode;
@@ -54,13 +64,16 @@ public class StoneDetector implements Detector {
 
     public void start(){
         tfod.activate();
+        activated=true;
+        run.start();
     }
 
     public void stop(){
+        activated=false;
         tfod.shutdown();
     }
 
-    public void updateObjects(){
+    private void updateObjects(){
         List<Recognition> sto = tfod.getUpdatedRecognitions();
 
         if(sto==null)return;
