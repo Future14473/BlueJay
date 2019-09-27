@@ -3,9 +3,9 @@
 To simplify the confusing and often time-consuming code needed for Computer Vision, this library was made.   
 It follows very simple rules:
 
-> To be included into the framework, code must be reusable across all forseeable future seasons (it will work as long as there isn't any big change to FTC software)  
+> **To be included into the framework, code must be reusable across all forseeable future seasons (it will work as long as there isn't any big change to FTC software)  
 
-> The person using the framework will be able to manage what they need control over and NOTHING ELSE. This means that all setup and android interfaces are handled automagickally.
+> **The person using the framework will be able to manage what they need control over and NOTHING ELSE. This means that all setup and android interfaces are handled automagickally.
 
 ## Super Quick Start for Rookie Teams
 I personally won't recommend doing this for the long run, but if you just need something to **work** then follow these steps:
