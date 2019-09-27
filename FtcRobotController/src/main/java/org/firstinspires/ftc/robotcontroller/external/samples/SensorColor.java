@@ -98,7 +98,7 @@ public class SensorColor extends LinearOpMode {
 
     // values is a reference to the hsvValues array.
     float[] hsvValues = new float[3];
-    final float values[] = hsvValues;
+      final float[] values = hsvValues;
 
     // bPrevState and bCurrState keep track of the previous and current state of the button
     boolean bPrevState = false;

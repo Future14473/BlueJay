@@ -32,12 +32,14 @@ package org.firstinspires.ftc.teamcode.Original;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.Original.Localizers.IMU;
+import org.firstinspires.ftc.teamcode.Original.Localizers.LocalizationManager;
 import org.firstinspires.ftc.teamcode.Original.detectors.ImageDetector;
 import org.firstinspires.ftc.teamcode.Original.detectors.OpencvDetector;
 import org.firstinspires.ftc.teamcode.Original.detectors.StoneDetector;
 
-@TeleOp(name="The Three <<Holy Systems>>", group ="Primordial Artifact")
-public class DuoDou extends LinearOpMode{
+@TeleOp(name = "The Three <<Holy Systems>>", group = "Primordial Artifact")
+public class DuoDou extends LinearOpMode {
 
     public void runOpMode() {
 
@@ -46,32 +48,43 @@ public class DuoDou extends LinearOpMode{
         ImageDetector detector = new ImageDetector(this, false);
         StoneDetector stone = new StoneDetector(detector, this, true);
         OpencvDetector foundation = new OpencvDetector(detector, this);
+        IMU imu = new IMU(this);
 
-        //stone.start();
-        //detector.start();
+        LocalizationManager m =new LocalizationManager();
+        m.addLocalizer(detector);
+        m.addLocalizer(imu);
+
+        m.start();
+        stone.start();
+        detector.start();
         foundation.start();
+        imu.start();
 
         while (!isStopRequested()) {
-            detector.printposition(detector.getposition());
+            detector.printposition(detector.getPosition());
 
             foundation.print(foundation.getObjects());
 
             stone.print(stone.getObjects());
 
             telemetry.update();
+
+            detector.printposition(m.getPosition());
         }
 
         // Disable Tracking when we are done;
         detector.stop();
         stone.stop();
         foundation.stop();
+        m.stop();
+        imu.stop();
     }
 
-    public void delay(Long time){
-        Long start = System.currentTimeMillis();
+    public void delay(Long time) {
+        long start = System.currentTimeMillis();
 
-        while(System.currentTimeMillis()-start<time){
-           //wait
+        while (System.currentTimeMillis() - start < time) {
+            //wait
         }
     }
 }
