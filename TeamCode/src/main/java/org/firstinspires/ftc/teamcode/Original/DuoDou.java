@@ -72,7 +72,7 @@ public class DuoDou extends LinearOpMode {
             detector.printposition(m.getPosition());
         }
 
-        // Disable Tracking when we are done;
+        // Disable Tracking when we are done
         detector.stop();
         stone.stop();
         foundation.stop();
