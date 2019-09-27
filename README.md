@@ -7,6 +7,14 @@ It follows very simple rules:
 
 - The person using the framework will be able to manage what they need control over and NOTHING ELSE. This means that all setup and android interfaces are handled automagickally.
 
+## Features
+
+- Foundation Detection
+- Stone Detection
+- Localization with Vumarks
+- IMU Interface
+- All the above running simultaneously
+
 ## Super Quick Start for Rookie Teams
 I personally won't recommend doing this for the long run, but if you just need something to **work** then follow these steps:
 
@@ -110,4 +118,7 @@ A note: the IMU class, as a non-absolute Localizer, will always return the diffe
 //TODO LocalizationManager
 	
 
+## Contact
+If you got questions, email me at <xchenbox@gmail.com> or alternatively, find us on Facebook <https://www.facebook.com/future14473>
+We don't have a discord (yet)
 
