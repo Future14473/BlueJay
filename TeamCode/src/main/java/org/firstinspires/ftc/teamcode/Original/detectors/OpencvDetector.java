@@ -35,7 +35,7 @@ public class OpencvDetector implements Detector {
 
     volatile boolean activated=false;
 
-    Thread run = new Thread(){
+    Thread run = new Thread() {
         @Override
         public void run() {
             while (activated){
@@ -98,6 +98,7 @@ public class OpencvDetector implements Detector {
      * @return
      */
     public Point getObjects(){
+        if(!activated)return null;
 
         return FoundationLocation;
     }

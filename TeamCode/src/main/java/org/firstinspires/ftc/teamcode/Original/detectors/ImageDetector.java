@@ -17,6 +17,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+import org.firstinspires.ftc.teamcode.Original.Localizers.Localizer;
+import org.firstinspires.ftc.teamcode.Original.Localizers.orientation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +29,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 
-public class ImageDetector {
+public class ImageDetector implements Localizer {
     VuforiaLocalizer vuforia;
     private static final String VUFORIA_KEY =
             "AdpOQvf/////AAABmVMPMsn7aUUnm1KFPBduEHRDxu+mTcwssSUu9XwZdfhNnf" +
@@ -97,6 +99,7 @@ public class ImageDetector {
         setuptrackables(allTrackables);
 
         setupPhone();
+
     }
 
     public void start() {
@@ -105,7 +108,7 @@ public class ImageDetector {
         }
 
         activated=true;
-        run.start();;
+        run.start();
     }
 
     public void stop() {
@@ -120,8 +123,21 @@ public class ImageDetector {
      * Will be null if unavailable
      * @return
      */
-    public OpenGLMatrix getposition(){
-        return Location;
+    public orientation getPosition(){
+
+        if (Location !=null && activated) {
+            // express position (translation) of robot in inches.
+            VectorF translation = Location.getTranslation();
+            // express the rotation of the robot in degrees.
+            Orientation rotation = Orientation.getOrientation(Location, EXTRINSIC, XYZ, DEGREES);
+
+            //translation.get(n) 0:x 1:y 2:z  Also remember the constant mmPerInch for Unit conversions
+            //rotation.firstangle 1st:roll 2nd:pitch 3rd:heading
+
+            return new orientation(translation.get(0),translation.get(1),rotation.thirdAngle);
+        } else {
+            return null;
+        }
     }
 
     private void updateposition() {
@@ -183,34 +199,9 @@ public class ImageDetector {
 
     }
 
-    public void printposition() {
-        // Provide feedback as to where the robot is located (if we know).
-        if (Location !=null) {
-            // express position (translation) of robot in inches.
-            VectorF translation = Location.getTranslation();
-            telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
-                    translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
-
-            // express the rotation of the robot in degrees.
-            Orientation rotation = Orientation.getOrientation(Location, EXTRINSIC, XYZ, DEGREES);
-            telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
-        } else {
-            telemetry.addData("Visible Target", "none");
-        }
-
-    }
-
-    public void printposition(OpenGLMatrix toprint) {
-        // Provide feedback as to where the robot is located (if we know).
-        if (Location !=null) {
-            // express position (translation) of robot in inches.
-            VectorF translation = toprint.getTranslation();
-            telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
-                    translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
-
-            // express the rotation of the robot in degrees.
-            Orientation rotation = Orientation.getOrientation(Location, EXTRINSIC, XYZ, DEGREES);
-            telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+    public void printposition(orientation toprint) {
+        if (toprint !=null) {
+            telemetry.addData("Position (mm) (rot)",toprint.x+" "+toprint.y+" "+toprint.rot);
         } else {
             telemetry.addData("Visible Target", "none");
         }

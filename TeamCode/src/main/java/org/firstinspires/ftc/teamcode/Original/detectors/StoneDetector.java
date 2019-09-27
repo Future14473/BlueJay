@@ -86,6 +86,8 @@ public class StoneDetector implements Detector {
      * @return
      */
     public List<Recognition> getObjects(){
+        if(!activated)return null;
+
         return objects;
     }
 
