@@ -35,7 +35,7 @@ I personally won't recommend doing this for the long run, but if you just need s
 
 		@TeleOp(name = "The Three <<Holy Systems>>", group = "Primordial Artifact")
 		public class DuoDou extends LinearOpMode {
-	    	      public void runOpMode() {
+	    	 public void runOpMode() {
 
 				telemetry.setAutoClear(true);
 
