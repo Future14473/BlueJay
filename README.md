@@ -3,9 +3,9 @@
 To simplify the confusing and often time-consuming code needed for Computer Vision, this library was made.   
 It follows very simple rules:
 
-- To be included into the framework, code must be reusable across all forseeable future seasons (it will work as long as there isn't any big change to FTC software)  
+- It can be used for all seasons. This code will always be useful unless FTC changes their software setup.
 
-- The person using the framework will be able to manage what they need control over and NOTHING ELSE. This means that all setup and android interfaces are handled automagickally.
+- If you don't need it, you should never see it. All the boilerpalce nitty gritty is handled by magick.
 
 ## Features
 
