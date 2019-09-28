@@ -35,53 +35,54 @@ I personally won't recommend doing this for the long run, but if you just need s
 
 		@TeleOp(name = "The Three <<Holy Systems>>", group = "Primordial Artifact")
 		public class DuoDou extends LinearOpMode {
-	    public void runOpMode() {
+	    		public void runOpMode() {
 
-		telemetry.setAutoClear(true);
+				telemetry.setAutoClear(true);
 
-		ImageDetector detector = new ImageDetector(this, false);
-		StoneDetector stone = new StoneDetector(detector, this, true);
-		OpencvDetector foundation = new OpencvDetector(detector, this);
-		IMU imu = new IMU(this);
+				ImageDetector detector = new ImageDetector(this, false);
+				StoneDetector stone = new StoneDetector(detector, this, true);
+				OpencvDetector foundation = new OpencvDetector(detector, this);
+				IMU imu = new IMU(this);
 
-		LocalizationManager m =new LocalizationManager();
-		m.addLocalizer(detector);
-		m.addLocalizer(imu);
+				LocalizationManager m =new LocalizationManager();
+				m.addLocalizer(detector);
+				m.addLocalizer(imu);
 
-		m.start();
-		stone.start();
-		detector.start();
-		foundation.start();
-		imu.start();
+				m.start();
+				stone.start();
+				detector.start();
+				foundation.start();
+				imu.start();
 
-		while (!isStopRequested()) {
-		    detector.printposition(detector.getPosition());
+				while (!isStopRequested()) {
+					detector.printposition(detector.getPosition());
 
-		    foundation.print(foundation.getObjects());
+				    	foundation.print(foundation.getObjects());
 
-		    stone.print(stone.getObjects());
+				    	stone.print(stone.getObjects());
 
-		    telemetry.update();
+				    	telemetry.update();
 
-		    detector.printposition(m.getPosition());
+				    	detector.printposition(m.getPosition());
+				}
+
+				// Disable Tracking when we are done;
+				detector.stop();
+				stone.stop();
+				foundation.stop();
+				m.stop();
+				imu.stop();
+			    }
+
+			    public void delay(Long time) {
+				long start = System.currentTimeMillis();
+
+				while (System.currentTimeMillis() - start < time) {
+				    //wait
+				}
+			    }
+			}
 		}
-
-		// Disable Tracking when we are done;
-		detector.stop();
-		stone.stop();
-		foundation.stop();
-		m.stop();
-		imu.stop();
-	    }
-
-	    public void delay(Long time) {
-		long start = System.currentTimeMillis();
-
-		while (System.currentTimeMillis() - start < time) {
-		    //wait
-		}
-	    }
-	}
 	
 ## Using the Library
 
