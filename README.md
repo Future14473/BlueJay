@@ -40,15 +40,10 @@ I personally won't recommend doing this for the long run, but if you just need s
 				telemetry.setAutoClear(true);
 
 				ImageDetector detector = new ImageDetector(this, false);
-				StoneDetector stone = new StoneDetector(detector, this, true);
-				OpencvDetector foundation = new OpencvDetector(detector, this);
+				StoneDetector stone = new StoneDetector(this, true);
+				OpencvDetector foundation = new OpencvDetector(this);
 				IMU imu = new IMU(this);
 
-				LocalizationManager m =new LocalizationManager();
-				m.addLocalizer(detector);
-				m.addLocalizer(imu);
-
-				m.start();
 				stone.start();
 				detector.start();
 				foundation.start();
@@ -70,16 +65,7 @@ I personally won't recommend doing this for the long run, but if you just need s
 				detector.stop();
 				stone.stop();
 				foundation.stop();
-				m.stop();
 				imu.stop();
-			    }
-
-			    public void delay(Long time) {
-				long start = System.currentTimeMillis();
-
-				while (System.currentTimeMillis() - start < time) {
-				    //wait
-				}
 			    }
 			}
 		}
