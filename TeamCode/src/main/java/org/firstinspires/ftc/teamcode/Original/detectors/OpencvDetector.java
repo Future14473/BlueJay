@@ -14,6 +14,7 @@ import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class OpencvDetector implements Detector {
 
@@ -31,7 +32,7 @@ public class OpencvDetector implements Detector {
     private Bitmap image; //raw image for camera
     private Mat Matimage; //image converted to OpenCV Mat
     Point FoundationLocation; //point of detected foundation
-    int prevlength=0;//TODO testing purposes
+    int   matches =0;//TODO testing purposes
 
     volatile boolean activated=false;
 
@@ -44,12 +45,12 @@ public class OpencvDetector implements Detector {
         }
     };
 
-    public OpencvDetector (ImageDetector vuforia, OpMode opMode){
+    public OpencvDetector (OpMode opMode){
         this.opMode = opMode;
         this.hardwareMap = opMode.hardwareMap;
         this.telemetry = opMode.telemetry;
 
-        this.vuforia=vuforia;
+        this.vuforia=new ImageDetector(opMode);
     }
 
     //for future interface
@@ -78,7 +79,7 @@ public class OpencvDetector implements Detector {
             return;
         }
 
-        prevlength=contours.size();
+        matches = contours.size();
 
         Point sum=new Point();
         double length = contours.get(0).toList().size();
@@ -110,10 +111,44 @@ public class OpencvDetector implements Detector {
     public void print(Point im){
 
         if(im==null){
-            telemetry.addData("Position","not available");
+            telemetry.addData("OpenCV","not available");
             return;
         }
 
-        telemetry.addData("Position (x,y)",im.x+" "+im.y+" matches "+prevlength);
+        telemetry.addData("OpenCv-Position (x,y)",im.x+" "+im.y+" matches "+ matches);
+    }
+
+    public double flatness (MatOfPoint in){
+        Point sum=new Point();
+        List<Point> points = in.toList();
+
+        for(Point p : points){
+            sum.x+=p.x;
+            sum.y+=p.y;
+        }
+
+        //sum is now avg
+        sum = new Point(sum.x/(double)points.size(),sum.y/(double)points.size());
+
+        List<Point> deviations = new ArrayList<Point>();
+
+        for(Point p: points){
+            deviations.add(new Point(Math.abs(p.x-sum.x),Math.abs(p.y-sum.y)));
+        }
+
+        Point sum2=new Point();
+
+        for(Point p : deviations){
+            sum2.x+=p.x;
+            sum2.y+=p.y;
+        }
+        Point mean = new Point(sum2.x/(double)deviations.size(),sum2.y/(double)deviations.size());
+
+        Point totaldeviation = new Point();
+        for(Point p: deviations){
+            deviations.add(new Point(Math.abs(p.x-mean.x),Math.abs(p.y-mean.y)));
+        }
+
+        return totaldeviation.x+totaldeviation.y;
     }
 }

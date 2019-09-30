@@ -30,7 +30,6 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 
 public class ImageDetector implements Localizer {
-    VuforiaLocalizer vuforia;
     private static final String VUFORIA_KEY =
             "AdpOQvf/////AAABmVMPMsn7aUUnm1KFPBduEHRDxu+mTcwssSUu9XwZdfhNnf" +
                     "gEDfs+klqAkWKOsuZBS8101agFiMYFoJUZvnBjKYUYF2omelpSnPnhAS" +
@@ -40,6 +39,7 @@ public class ImageDetector implements Localizer {
                     "J8Jv2Ek7cdWYvzHpa3uVyuF76chz7qGc4eAw8nSC0Ebqd0yf9S0oyqIh7" +
                     "MhUBCtvSvbsCpnbWHG/30IBpkC6ENlZhJSh";
 
+    private static VuforiaLocalizer VuforiaStatic = null;
     private OpMode opMode;
     private HardwareMap hardwareMap;
     public Telemetry telemetry;
@@ -83,23 +83,24 @@ public class ImageDetector implements Localizer {
         }
     };
 
+    public ImageDetector(OpMode opMode) {
+        this(opMode,false);
+    }
     public ImageDetector(OpMode opMode, boolean useDisplay) {
 
         this.opMode = opMode;
         this.hardwareMap = opMode.hardwareMap;
         this.telemetry = opMode.telemetry;
 
-        vuforia = SetupVuforia(useDisplay);
+        if(isVuforiaInitialized())return;
 
-        //not necessary, you can ignore it
-        Vuforia.setFrameFormat(PIXEL_FORMAT.RGB565, true);
+        SetupVuforia(useDisplay);
 
-        allTrackables = this.vuforia.loadTrackablesFromAsset("Skystone");
+        allTrackables = VuforiaStatic.loadTrackablesFromAsset("Skystone");
 
         setuptrackables(allTrackables);
 
         setupPhone();
-
     }
 
     public void start() {
@@ -152,7 +153,7 @@ public class ImageDetector implements Localizer {
                     //TODO future use
                 }
 
-                telemetry.addData("Visible Target", trackable.getName());
+                //telemetry.addData("Visible Target", trackable.getName());
 
                 // getUpdatedRobotLocation() will return null if no new information is available since
                 // the last time that call was made, or if the trackable is not currently visible.
@@ -179,7 +180,7 @@ public class ImageDetector implements Localizer {
         cameraraw = null;
 
         try {
-            VuforiaLocalizer.CloseableFrame closeableFrame = vuforia.getFrameQueue().take();
+            VuforiaLocalizer.CloseableFrame closeableFrame = VuforiaStatic.getFrameQueue().take();
 
             for (int i = 0; i < closeableFrame.getNumImages(); i++) {
                 Image image = closeableFrame.getImage(i);
@@ -201,12 +202,15 @@ public class ImageDetector implements Localizer {
 
     public void printposition(orientation toprint) {
         if (toprint !=null) {
-            telemetry.addData("Position (mm) (rot)",toprint.x+" "+toprint.y+" "+toprint.rot);
+            telemetry.addData("Vuforia-Position (mm) (rot)",toprint.x+" "+toprint.y+" "+toprint.rot);
         } else {
-            telemetry.addData("Visible Target", "none");
+            telemetry.addData("Vuforia", "offline");
         }
     }
-    private VuforiaLocalizer SetupVuforia(boolean useDisplay) {
+    /**
+     * ensures that the static vuforia is made
+     **/
+    private void SetupVuforia(boolean useDisplay) {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
 
         //Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
@@ -220,7 +224,10 @@ public class ImageDetector implements Localizer {
         //  Instantiate the Vuforia engine
         VuforiaLocalizer vuforia = ClassFactory.getInstance().createVuforia(parameters);
 
-        return vuforia;
+        //not necessary, you can ignore it
+        Vuforia.setFrameFormat(PIXEL_FORMAT.RGB565, true);
+
+        VuforiaStatic = vuforia;
     }
 
     private void setuptrackables(VuforiaTrackables targetsSkyStone) {
@@ -343,6 +350,14 @@ public class ImageDetector implements Localizer {
     public void print(String s){
        //telemetry.addData("",s);
        //telemetry.update();
+    }
+
+    public static boolean isVuforiaInitialized(){
+        return  VuforiaStatic!=null;
+    }
+
+    public static VuforiaLocalizer getVuforia(){
+        return  VuforiaStatic;
     }
 
 }

@@ -43,8 +43,7 @@ public class TensorFlowDetectionDEMO extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        ImageDetector imager = new ImageDetector(this, false);
-        StoneDetector stone = new StoneDetector(imager, this, true);
+        StoneDetector stone = new StoneDetector(this, true);
 
         //start streaming UI and activate detection loop
         stone.start();

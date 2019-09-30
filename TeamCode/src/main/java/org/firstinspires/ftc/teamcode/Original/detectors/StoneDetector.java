@@ -29,12 +29,13 @@ public class StoneDetector implements Detector {
         }
     };
 
-    public StoneDetector(ImageDetector imager, OpMode opMode, boolean useDisplay){
+    public StoneDetector(OpMode opMode, boolean useDisplay){
         this.opMode=opMode;
         this.hardwareMap=opMode.hardwareMap;
         this.telemetry=opMode.telemetry;
 
-        tfod = SetupTensorflow(imager.vuforia, useDisplay);
+        //by creating an image detector, we ensure that the vulocalizer singleton has been created
+        tfod = SetupTensorflow(new ImageDetector(opMode).getVuforia(), useDisplay);
     }
 
     private TFObjectDetector SetupTensorflow(VuforiaLocalizer vuforia, boolean useDisplay) {
@@ -92,13 +93,13 @@ public class StoneDetector implements Detector {
     }
 
     public void print(List<Recognition> obj){
-        if(obj==null){
-            telemetry.addData("Tfod","no yield");
+        if(obj==null || obj.size()==0){
+            telemetry.addData("Tensorflow","offline");
             return;
         }
 
         for(Recognition r : obj){
-            telemetry.addData("Tfod object",r.getLabel());
+            telemetry.addData("Tensorflow-object",r.getLabel());
         }
     }
 }

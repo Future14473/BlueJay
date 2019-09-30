@@ -33,7 +33,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Original.Localizers.IMU;
-import org.firstinspires.ftc.teamcode.Original.Localizers.LocalizationManager;
 import org.firstinspires.ftc.teamcode.Original.detectors.ImageDetector;
 import org.firstinspires.ftc.teamcode.Original.detectors.OpencvDetector;
 import org.firstinspires.ftc.teamcode.Original.detectors.StoneDetector;
@@ -45,16 +44,14 @@ public class DuoDou extends LinearOpMode {
 
         telemetry.setAutoClear(true);
 
-        ImageDetector detector = new ImageDetector(this, false);
-        StoneDetector stone = new StoneDetector(detector, this, true);
-        OpencvDetector foundation = new OpencvDetector(detector, this);
+        telemetry.addData("Booting Up"," . . .");
+        telemetry.update();
+
         IMU imu = new IMU(this);
+        ImageDetector detector = new ImageDetector(this, false);
+        StoneDetector stone = new StoneDetector(this, true);
+        OpencvDetector foundation = new OpencvDetector(this);
 
-        LocalizationManager m =new LocalizationManager();
-        m.addLocalizer(detector);
-        m.addLocalizer(imu);
-
-        m.start();
         stone.start();
         detector.start();
         foundation.start();
@@ -67,24 +64,17 @@ public class DuoDou extends LinearOpMode {
 
             stone.print(stone.getObjects());
 
-            telemetry.update();
+            imu.printposition(imu.getDeltaPosition());
 
-            detector.printposition(m.getPosition());
+            telemetry.addData("==========","Loop delimiter");
+
+            telemetry.update();
         }
 
         // Disable Tracking when we are done
         detector.stop();
         stone.stop();
         foundation.stop();
-        m.stop();
         imu.stop();
-    }
-
-    public void delay(Long time) {
-        long start = System.currentTimeMillis();
-
-        while (System.currentTimeMillis() - start < time) {
-            //wait
-        }
     }
 }
