@@ -39,10 +39,24 @@ public class IMU implements deltaLocalizer{
 
         imu.initialize(parameters);
 
-        // make sure the imu gyro is calibrated before continuing.
-        while (!imu.isGyroCalibrated()) {
+        //watchdog
+        Long start = System.currentTimeMillis();
+        //make sure the imu gyro is calibrated before continuing.
+        loop:while (!imu.isGyroCalibrated()) {
+            if(System.currentTimeMillis()-start>500){
+                opmode.telemetry.addData("IMU","watchdig quit");
+                opmode.telemetry.update();
+
+                break loop;
+            }
+
             //wait
+            opmode.telemetry.addData("IMU",("Loading"+Math.random()));
+            opmode.telemetry.update();
         }
+
+        opmode.telemetry.addData("IMU","startup done");
+        opmode.telemetry.update();
 
     }
 
@@ -105,11 +119,11 @@ public class IMU implements deltaLocalizer{
         return new orientation(deltaPos.x,deltaPos.y,deltaAngle);
     }
 
-    public void print(double angle){
-        if(activated){
-            opmode.telemetry.addData("IMU (angle)",angle);
-        }else{
-            opmode.telemetry.addData("IMU","Offline");
+    public void printposition(orientation toprint) {
+        if (toprint !=null) {
+            opmode.telemetry.addData("IMU-Position (mm) (rot)",toprint.x+" "+toprint.y+" "+toprint.rot);
+        } else {
+            opmode.telemetry.addData("IMU", "offline");
         }
     }
 
