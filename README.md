@@ -82,6 +82,8 @@ For example:
 
 Is used to get the Vuforia localizer running. It requires an opmode instance and a boolean for whether the RC should display its view.
 
+Please realize the purpose of the `start()` and `stop()` methods. We've made a careful decision to include them even though they make the library more complicated. Keeping all the detectors active (ie. calling start() for each) will cause your framerate to plummet and latency to increase.
+
 To request data, simply do:
 
 	detector.getPosition();
