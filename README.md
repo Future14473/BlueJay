@@ -18,13 +18,14 @@ It follows very simple rules:
 ## Super Quick Start for Rookie Teams
 I personally won't recommend doing this for the long run, but if you just need something to **work** then follow these steps:
 
-1. Download this library as a .zip file
+1. Go to the `Releases` Tab and download this as a .zip Android Studio Project
 2. Unzip the library
-3. Open Android Studio and go to File>new>existing project>**where you unzipped the library**
+3. Open Android Studio and go to File > new > existing project >**where you unzipped the library**
 4. Download to your RC
 5. Run <<Three systems>> opmode
 6. Positioning data will be printed via telemetry, if you want to plug the data elsewhere, find the Telemetry calls in the file `Douduo` and match the labels from the DS telemetry log
-	
+
+* Note: I know that this download is >1GB, but it will save you the frustration of setup. It already has **everything**
 ## Proper Start for the Minority who care
 
 1. Copy all the code from the `Original` folder into your teamcode. We might refactor into a module, but think this way is easier
