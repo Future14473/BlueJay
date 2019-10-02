@@ -32,7 +32,9 @@ I personally won't recommend doing this for the long run, but if you just need s
 2. Install opencv for android version 3.4.3 into your project
 3. Fix dependencies by clicking the suggested links in your build window
 4. If if dosent work, go to the `build.gradle` and `build.releases.grade` folders in the Android File View. This is where IntelliJ writes down for real what all the dependencies for each module are. All the import UI is just an illusion. Go fix __that__. The details are beyond the scope of this readme
-5. Study this code:
+
+## Using the Library
+First off, working code for everyone
 
 		@TeleOp(name = "The Three <<Holy Systems>>", group = "Primordial Artifact")
 		public class DuoDou extends LinearOpMode {
@@ -69,9 +71,8 @@ I personally won't recommend doing this for the long run, but if you just need s
 				imu.stop();
 			    }
 			}
-		}
-	
-## Using the Library
+		}	
+
 
 All classes that the user uses follow a simple guideline: a constructor with clear parameter requirements, a `start()` method to begin computing, a `stop()` method to stop computing, and one method with `get` at the beginning of its name. This returns whatever the class is used for.
 
