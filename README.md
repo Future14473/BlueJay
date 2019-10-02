@@ -9,7 +9,7 @@ It follows very simple rules:
 
 ## Features
 
-- Foundation Detection
+- Foundation Detection (unstable, being refined)
 - Stone Detection
 - Localization with Vumarks
 - IMU Interface
