@@ -28,7 +28,7 @@ I personally won't recommend doing this for the long run, but if you just need s
 * Note: I know that this download is >1GB, but it will save you the frustration of setup. It already has **everything**
 ## Proper Start for the Minority who care
 
-1. Copy all the code from the `Original` folder into your teamcode. We might refactor into a module, but think this way is easier
+1. Clone and make a new project from VCS in Android Studio. Code is in the `Original` folder. We might refactor into a module, but think this way is easier
 2. Install opencv for android version 3.4.3 into your project
 3. Fix dependencies by clicking the suggested links in your build window
 4. If if dosent work, go to the `build.gradle` and `build.releases.grade` folders in the Android File View. This is where IntelliJ writes down for real what all the dependencies for each module are. All the import UI is just an illusion. Go fix __that__. The details are beyond the scope of this readme
