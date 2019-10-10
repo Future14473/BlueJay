@@ -111,5 +111,5 @@ A note: the IMU class, as a non-absolute Localizer, will always return the diffe
 
 ## Contact
 If you got questions, email me at <xchenbox@gmail.com> or alternatively, find us on Facebook <https://www.facebook.com/future14473>
-We don't have a discord (yet)
+We don't have a discord (yet). If there's any problems or ambiguity, shoot me an email
 
