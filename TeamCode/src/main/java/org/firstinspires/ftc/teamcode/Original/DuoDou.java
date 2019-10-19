@@ -29,52 +29,93 @@
 
 package org.firstinspires.ftc.teamcode.Original;
 
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.Original.Localizers.IMU;
 import org.firstinspires.ftc.teamcode.Original.detectors.ImageDetector;
 import org.firstinspires.ftc.teamcode.Original.detectors.OpencvDetector;
 import org.firstinspires.ftc.teamcode.Original.detectors.StoneDetector;
 
+import java.util.Iterator;
+
 @TeleOp(name = "The Three <<Holy Systems>>", group = "Primordial Artifact")
 public class DuoDou extends LinearOpMode {
 
-    public void runOpMode() {
+    public void runOpMode() throws InterruptedException {
+//
+////        try {
+////            ExpansionHubEx hub = new ExpansionHubEx((LynxModule) (hardwareMap.get("Expansion Hub Portal 1")));
+////            hub.setPhoneChargeEnabled(true);
+////            telemetry.addData("Charging set to", hub.isPhoneChargeEnabled());
+////            telemetry.update();
+////        }catch(IllegalArgumentException e){
+////            telemetry.addData("excpetion!", e.toString());
+////            telemetry.update();
+////        }
+//
+//        telemetry.setAutoClear(true);
+//
+//        telemetry.addData("Booting Up"," . . .");
+//        telemetry.update();
+//
+//        IMU imu = new IMU(this);
+//        ImageDetector detector = new ImageDetector(this, false);
+//        StoneDetector stone = new StoneDetector(this, true);
+//        OpencvDetector foundation = new OpencvDetector(this);
+//
+//        stone.start();
+//        detector.start();
+//        foundation.start();
+//        imu.start();
+//
+//        while (!isStopRequested()) {
+//            detector.printposition(detector.getPosition());
+//
+//            foundation.print(foundation.getObjects());
+//
+//            stone.print(stone.getObjects());
+//
+//            imu.printposition(imu.getDeltaPosition());
+//
+//            telemetry.addData("==========","Loop delimiter");
+//
+//            telemetry.update();
+//        }
+//
+//        // Disable Tracking when we are done
+//        detector.stop();
+//        stone.stop();
+//        foundation.stop();
+//        imu.stop();
+//    }
+//
+//    public void listhardware(){
+//        telemetry.setAutoClear(false);
+//
+//        Iterator<com.qualcomm.robotcore.hardware.HardwareDevice> t = hardwareMap.iterator();
+//        while(t.hasNext()){
+//
+//            telemetry.addData("device found",(t.next().getDeviceName()));
+//            telemetry.update();
+//        }
+//
+//        telemetry.setAutoClear(true);
 
-        telemetry.setAutoClear(true);
+        double r = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
+        double robotAngle = Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4;
+        double rightX = gamepad1.right_stick_x;
+        final double v1 = r * Math.cos(robotAngle) + rightX;
+        final double v2 = r * Math.sin(robotAngle) - rightX;
+        final double v3 = r * Math.sin(robotAngle) + rightX;
+        final double v4 = r * Math.cos(robotAngle) - rightX;
 
-        telemetry.addData("Booting Up"," . . .");
-        telemetry.update();
-
-        IMU imu = new IMU(this);
-        ImageDetector detector = new ImageDetector(this, false);
-        StoneDetector stone = new StoneDetector(this, true);
-        OpencvDetector foundation = new OpencvDetector(this);
-
-        stone.start();
-        detector.start();
-        foundation.start();
-        imu.start();
-
-        while (!isStopRequested()) {
-            detector.printposition(detector.getPosition());
-
-            foundation.print(foundation.getObjects());
-
-            stone.print(stone.getObjects());
-
-            imu.printposition(imu.getDeltaPosition());
-
-            telemetry.addData("==========","Loop delimiter");
-
-            telemetry.update();
-        }
-
-        // Disable Tracking when we are done
-        detector.stop();
-        stone.stop();
-        foundation.stop();
-        imu.stop();
+        hardwareMap.get(DcMotor.class,"topl").setPower(v1);
+        hardwareMap.get(DcMotor.class,"topr").setPower(v2);
+        hardwareMap.get(DcMotor.class,"botl").setPower(v3);
+        hardwareMap.get(DcMotor.class,"botr").setPower(v4);
     }
 }

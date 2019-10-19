@@ -15,17 +15,17 @@ import org.opencv.imgproc.Imgproc;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Pipeline {
+public class Pipeline2 {
 
     //Outputs
-    private Mat resizeImageOutput = new Mat();
-    private Point newPoint0Output = new Point();
-    private Point newPoint1Output = new Point();
-    private Mat cvRectangleOutput = new Mat();
-    private Mat hsvThresholdOutput = new Mat();
-    private ArrayList<MatOfPoint> findContoursOutput = new ArrayList<MatOfPoint>();
+    private Mat                   resizeImageOutput    = new Mat();
+    private Point                 newPoint0Output      = new Point();
+    private Point                 newPoint1Output      = new Point();
+    private Mat                   cvRectangleOutput    = new Mat();
+    private Mat                   hsvThresholdOutput   = new Mat();
+    private ArrayList<MatOfPoint> findContoursOutput   = new ArrayList<MatOfPoint>();
     private ArrayList<MatOfPoint> filterContoursOutput = new ArrayList<MatOfPoint>();
-    private ArrayList<MatOfPoint> convexHullsOutput = new ArrayList<MatOfPoint>();
+    private ArrayList<MatOfPoint> convexHullsOutput    = new ArrayList<MatOfPoint>();
 
 //    static {
 //        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
@@ -34,10 +34,11 @@ public class Pipeline {
     /**
      * This is the primary method that runs the entire pipeline and updates the outputs.
      */
-    public ArrayList<MatOfPoint> process(Mat source0) {
-        //memory leak is a real Problem
+    public Mat process(Mat source0) {
         System.gc();
         System.runFinalization();
+
+        Mat original = source0.clone();
 
         // Step Resize_Image0:
         Mat resizeImageInput = source0;
@@ -68,9 +69,14 @@ public class Pipeline {
 
         // Step HSV_Threshold0:
         Mat hsvThresholdInput = cvRectangleOutput;
-        double[] hsvThresholdHue = {80.93525179856118, 151.21212121212122};
-        double[] hsvThresholdSaturation = {146.76258992805754, 255.0};
-        double[] hsvThresholdValue = {43.57014388489208, 255.0};
+        //For Blue
+        //double[] hsvThresholdHue = {0,20};
+
+        //for Red
+        double[] hsvThresholdHue = {110,130};
+
+        double[] hsvThresholdSaturation = {190.76258992805754, 255.0};
+        double[] hsvThresholdValue = {30.57014388489208, 255.0};
         hsvThreshold(hsvThresholdInput, hsvThresholdHue, hsvThresholdSaturation, hsvThresholdValue, hsvThresholdOutput);
 
         // Step Find_Contours0:
@@ -97,7 +103,13 @@ public class Pipeline {
         ArrayList<MatOfPoint> convexHullsContours = filterContoursOutput;
         convexHulls(convexHullsContours, convexHullsOutput);
 
-        return  convexHullsOutput();
+        //draw convex hulls
+        Scalar color = new Scalar(0, 255, 0);   // Green
+        for(int i=0; i < convexHullsOutput.size(); i++){
+            Imgproc.drawContours(original, convexHullsOutput, i, color);
+        }
+
+        return  original;
     }
 
     public Mat resizeImageOutput() {

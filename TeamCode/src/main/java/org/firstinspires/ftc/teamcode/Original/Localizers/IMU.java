@@ -94,6 +94,7 @@ public class IMU implements deltaLocalizer{
 
                 lastAngle = angle;
         //========POSITION==========
+                opmode.telemetry.addData("imu raw read",pos.x);
 
                 deltaPos.x=pos.x-lastPos.x;
                 deltaPos.y=pos.y-lastPos.y;
@@ -111,7 +112,8 @@ public class IMU implements deltaLocalizer{
 
     /**
      * call this as fast as you can!
-     * return difference in position to  when you last called it
+     * return difference in orientation to  when you last called it
+     * (x,y) is currently broken. But it isn't accurate so you should never use it
      * @return defaults to mm for position x and y
      */
     public orientation getDeltaPosition(){
