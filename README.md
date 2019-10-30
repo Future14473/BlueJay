@@ -58,10 +58,10 @@ First off, working code for everyone
 				    	foundation.print(foundation.getObjects());
 
 				    	stone.print(stone.getObjects());
+                                         
+                                        detector.printposition(imu.getPosition());
 
 				    	telemetry.update();
-
-				    	detector.printposition(m.getPosition());
 				}
 
 				// Disable Tracking when we are done;
@@ -112,4 +112,3 @@ A note: the IMU class, as a non-absolute Localizer, will always return the diffe
 ## Contact
 If you got questions, email me at <xchenbox@gmail.com> or alternatively, find us on Facebook <https://www.facebook.com/future14473>
 We don't have a discord (yet). If there's any problems or ambiguity, shoot me an email
-
