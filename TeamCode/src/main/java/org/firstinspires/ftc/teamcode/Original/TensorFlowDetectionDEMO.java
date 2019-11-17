@@ -33,7 +33,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.teamcode.Original.detectors.ImageDetector;
 import org.firstinspires.ftc.teamcode.Original.detectors.StoneDetector;
 
 import java.util.List;

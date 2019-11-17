@@ -27,11 +27,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.Original;
+
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.Original.detectors.FoundationPipeline;
 import org.firstinspires.ftc.teamcode.Original.detectors.ImageDetector;
 import org.firstinspires.ftc.teamcode.Original.detectors.OpencvDetector;
 import org.firstinspires.ftc.teamcode.Original.detectors.StoneDetector;
@@ -42,7 +44,6 @@ import java.util.Iterator;
 public class DuoDou extends LinearOpMode {
 
     public void runOpMode() throws InterruptedException {
-
 //        try {
 //            ExpansionHubEx hub = new ExpansionHubEx((LynxModule) (hardwareMap.get("Expansion Hub Portal 1")));
 //            hub.setPhoneChargeEnabled(true);
@@ -53,15 +54,17 @@ public class DuoDou extends LinearOpMode {
 //            telemetry.update();
 //        }
 
+
+
+
         telemetry.setAutoClear(true);
 
         telemetry.addData("Booting Up"," . . .");
         telemetry.update();
 
-        //IMU imu = new IMU(this);
-        ImageDetector detector = new ImageDetector(this, false);
-        StoneDetector stone = new StoneDetector(this, true);
         OpencvDetector foundation = new OpencvDetector(this);
+        ImageDetector detector = new ImageDetector(this, false);
+        StoneDetector stone = new StoneDetector(this, false);
 
         stone.start();
         detector.start();
@@ -101,17 +104,5 @@ public class DuoDou extends LinearOpMode {
 
         telemetry.setAutoClear(true);
 
-//        double r = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
-//        double robotAngle = Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4;
-//        double rightX = gamepad1.right_stick_x;
-//        final double v1 = r * Math.cos(robotAngle) + rightX;
-//        final double v2 = r * Math.sin(robotAngle) - rightX;
-//        final double v3 = r * Math.sin(robotAngle) + rightX;
-//        final double v4 = r * Math.cos(robotAngle) - rightX;
-//
-//        hardwareMap.get(DcMotor.class,"topl").setPower(v1);
-//        hardwareMap.get(DcMotor.class,"topr").setPower(v2);
-//        hardwareMap.get(DcMotor.class,"botl").setPower(-v3);
-//        hardwareMap.get(DcMotor.class,"botr").setPower(-v4);
     }
 }

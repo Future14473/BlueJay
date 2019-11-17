@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.Original;
 
 import com.qualcomm.hardware.lynx.LynxAnalogInputController;
-import com.qualcomm.hardware.lynx.LynxController;
-import com.qualcomm.hardware.lynx.LynxDcMotorController;
 import com.qualcomm.hardware.lynx.LynxDigitalChannelController;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.lynx.commands.core.LynxGetBulkInputDataResponse;
