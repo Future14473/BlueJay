@@ -59,7 +59,7 @@ First off, working code for everyone
 
 				    	stone.print(stone.getObjects());
                                          
-                                        detector.printposition(imu.getPosition());
+                        detector.printposition(imu.getPosition());
 
 				    	telemetry.update();
 				}
