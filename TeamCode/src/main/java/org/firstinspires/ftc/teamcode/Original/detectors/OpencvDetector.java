@@ -31,7 +31,7 @@ public class OpencvDetector implements Detector {
 
     private Bitmap image; //raw image for camera
     private Mat    Matimage; //image converted to OpenCV Mat
-    Point FoundationLocation; //point of detected foundation
+    public List<Foundation> foundations = new ArrayList<Foundation>(); //detected foundations
 
     volatile boolean activated = false;
 
@@ -59,7 +59,7 @@ public class OpencvDetector implements Detector {
     }
 
     /**
-     * hold the phone as you would use it to scroll reddit
+     * hold the phone as you would use it to browse reddit
      * x: 0 at the top, increases as you go down
      * y: 0 at the right, increases as you go left
      */
@@ -75,13 +75,9 @@ public class OpencvDetector implements Detector {
         FoundationPipeline fp = new FoundationPipeline();
         fp.process(Matimage);
 
-        if (fp.foundations.size() == 0) {
-            FoundationLocation = null;
-        } else {
-            FoundationLocation = new Point(
-                    fp.foundations.get(0).x,
-                    fp.foundations.get(0).y);
-        }
+        foundations.clear();
+
+        foundations = new ArrayList<>(fp.foundations);
     }
 
     /**
@@ -89,56 +85,27 @@ public class OpencvDetector implements Detector {
      *
      * @return
      */
-    public Point getObjects() {
+    public List<Foundation> getObjects() {
         if (!activated) return null;
 
-        return FoundationLocation;
+        return foundations;
     }
 
     public void stop() {
         activated = false;
     }
 
-    public void print(Point im) {
+    public void print(List<Foundation> inp) {
 
-        if (im == null) {
+        if (inp == null) {
             telemetry.addData("OpenCV", "not available");
             return;
         }
 
-    }
-
-    public double flatness(MatOfPoint in) {
-        Point sum = new Point();
-        List<Point> points = in.toList();
-
-        for (Point p : points) {
-            sum.x += p.x;
-            sum.y += p.y;
+        for(Foundation f : inp){
+            // tabs not supported on tele
+            telemetry.addData("    Foundation", f.x+" "+f.y+" "+f.t.toString());
         }
 
-        //sum is now avg
-        sum = new Point(sum.x / (double) points.size(), sum.y / (double) points.size());
-
-        List<Point> deviations = new ArrayList<Point>();
-
-        for (Point p : points) {
-            deviations.add(new Point(Math.abs(p.x - sum.x), Math.abs(p.y - sum.y)));
-        }
-
-        Point sum2 = new Point();
-
-        for (Point p : deviations) {
-            sum2.x += p.x;
-            sum2.y += p.y;
-        }
-        Point mean = new Point(sum2.x / (double) deviations.size(), sum2.y / (double) deviations.size());
-
-        Point totaldeviation = new Point();
-        for (Point p : deviations) {
-            deviations.add(new Point(Math.abs(p.x - mean.x), Math.abs(p.y - mean.y)));
-        }
-
-        return totaldeviation.x + totaldeviation.y;
     }
 }

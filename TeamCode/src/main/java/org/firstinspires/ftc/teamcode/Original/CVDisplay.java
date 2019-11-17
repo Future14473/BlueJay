@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Original.CVBridger.CameraViewDisplay;
 import org.firstinspires.ftc.teamcode.Original.CVBridger.DogeCVDetector;
-import org.firstinspires.ftc.teamcode.Original.detectors.Pipeline2;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 

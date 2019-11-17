@@ -31,9 +31,9 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.Original.detectors.FoundationPipeline;
 import org.firstinspires.ftc.teamcode.Original.detectors.ImageDetector;
 import org.firstinspires.ftc.teamcode.Original.detectors.OpencvDetector;
 import org.firstinspires.ftc.teamcode.Original.detectors.StoneDetector;
@@ -53,10 +53,6 @@ public class DuoDou extends LinearOpMode {
 //            telemetry.addData("excpetion!", e.toString());
 //            telemetry.update();
 //        }
-
-
-
-
         telemetry.setAutoClear(true);
 
         telemetry.addData("Booting Up"," . . .");
