@@ -13,10 +13,3 @@
 
 // Include common definitions from above.
 apply from: '../build.common.gradle'
-apply plugin: 'com.android.application'
-
-repositories {
-    mavenCentral()
-}
-dependencies {
-}
