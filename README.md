@@ -27,7 +27,7 @@ I personally won't recommend doing this for the long run, but if you just need s
 
 * Note: I know that this download is >1GB, but it will save you the frustration of setup. It already has **everything**
 ## Proper Start for the Minority who care
-
+_Disclaimer: This is a messy way to do it, and overly simplified in its methology. It may not be responisble but it works_
 1. Clone and make a new project from VCS in Android Studio. Code is in the `Original` folder. We might refactor into a module, but think this way is easier
 2. Install opencv for android version 3.4.3 into your project
 3. Fix dependencies by clicking the suggested links in your build window
