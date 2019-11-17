@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Original.CVBridger.CameraViewDisplay;
 import org.firstinspires.ftc.teamcode.Original.CVBridger.DogeCVDetector;
+import org.firstinspires.ftc.teamcode.Original.detectors.FoundationPipeline;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 
@@ -12,6 +13,9 @@ import org.opencv.core.Point;
  *
  * This class is useful for finding the size you want to crop your camera image to.
  */
+
+//testing thing for display to rc. Thanks, doge.
+
 @TeleOp(name = "Display Testo", group = "DogeCV")
 public class CVDisplay extends OpMode {
 
@@ -19,7 +23,7 @@ public class CVDisplay extends OpMode {
     private DogeCVDetector detector = new DogeCVDetector() {
         @Override
         public Mat process(Mat rgba) {
-            return new Pipeline2().process(rgba);
+            return new FoundationPipeline().process(rgba);
         }
     };
 
