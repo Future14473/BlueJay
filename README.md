@@ -105,10 +105,15 @@ Or:
 Everything else is the same, but the Stone detector will return `recognition` objects and the Cv detector will return `Point` objects. These are all well documented and each class has the method that will format and interpret it for you.
 
 A note: the IMU class, as a non-absolute Localizer, will always return the difference in position since __the last time you called its getter method__. That means that if the robot spins more than 360 degrees between that time, you will have an unreliable rotational reading.
-
-//TODO LocalizationManager
 	
 
 ## Contact
 If you got questions, email me at <xchenbox@gmail.com> or alternatively, find us on Facebook <https://www.facebook.com/future14473>
 We don't have a discord (yet). If there's any problems or ambiguity, shoot me an email
+
+##Gallery
+![Uno!](Gallery/ex)
+![Dos](Gallery/ex2)
+![Threst](Gallery/ex3)
+![si](Gallery/ex4)
+![wu](Gallery/ex6)
