@@ -27,8 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
-package org.firstinspires.ftc.teamcode;
+package org.futurerobotics.bluejay.original;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -43,6 +42,7 @@ import java.util.Iterator;
 public class DuoDou extends LinearOpMode {
 
     public void runOpMode() throws InterruptedException {
+
 //        try {
 //            ExpansionHubEx hub = new ExpansionHubEx((LynxModule) (hardwareMap.get("Expansion Hub Portal 1")));
 //            hub.setPhoneChargeEnabled(true);
@@ -52,14 +52,16 @@ public class DuoDou extends LinearOpMode {
 //            telemetry.addData("excpetion!", e.toString());
 //            telemetry.update();
 //        }
+
         telemetry.setAutoClear(true);
 
-        telemetry.addData("Booting Up", " . . .");
+        telemetry.addData("Booting Up"," . . .");
         telemetry.update();
 
-        OpencvDetector foundation = new OpencvDetector(this);
+        //IMU imu = new IMU(this);
         ImageDetector detector = new ImageDetector(this, false);
-        StoneDetector stone = new StoneDetector(this, false);
+        StoneDetector stone = new StoneDetector(this, true);
+        OpencvDetector foundation = new OpencvDetector(this);
 
         stone.start();
         detector.start();
@@ -75,7 +77,7 @@ public class DuoDou extends LinearOpMode {
 
             //imu.printposition(imu.getDeltaPosition());
 
-            telemetry.addData("==========", "Loop delimiter");
+            telemetry.addData("==========","Loop delimiter");
 
             telemetry.update();
         }
@@ -87,17 +89,29 @@ public class DuoDou extends LinearOpMode {
         //imu.stop();
     }
 
-    public void listhardware() {
+    public void listhardware(){
         telemetry.setAutoClear(false);
 
         Iterator<com.qualcomm.robotcore.hardware.HardwareDevice> t = hardwareMap.iterator();
-        while (t.hasNext()) {
+        while(t.hasNext()){
 
-            telemetry.addData("device found", (t.next().getDeviceName()));
+            telemetry.addData("device found",(t.next().getDeviceName()));
             telemetry.update();
         }
 
         telemetry.setAutoClear(true);
 
+//        double r = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
+//        double robotAngle = Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4;
+//        double rightX = gamepad1.right_stick_x;
+//        final double v1 = r * Math.cos(robotAngle) + rightX;
+//        final double v2 = r * Math.sin(robotAngle) - rightX;
+//        final double v3 = r * Math.sin(robotAngle) + rightX;
+//        final double v4 = r * Math.cos(robotAngle) - rightX;
+//
+//        hardwareMap.get(DcMotor.class,"topl").setPower(v1);
+//        hardwareMap.get(DcMotor.class,"topr").setPower(v2);
+//        hardwareMap.get(DcMotor.class,"botl").setPower(-v3);
+//        hardwareMap.get(DcMotor.class,"botr").setPower(-v4);
     }
 }
