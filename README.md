@@ -9,7 +9,7 @@ It follows very simple rules:
 
 ## Features
 
-- Foundation Detection (Pretty good 95%)
+- Foundation Detection (Pretty good 95%) Pipeline: https://github.com/Future14473/CV-for-SkyStone-FTC/blob/master/bluejay/src/main/java/org/futurerobotics/bluejay/original/detectors/FoundationPipeline.java
 - Stone Detection
 - Localization with Vumarks
 - IMU Interface
