@@ -9,7 +9,7 @@ It follows very simple rules:
 
 ## Features
 
-- Foundation Detection (Pretty good 95%, waiting for Shawn to push)
+- Foundation Detection (Pretty good 95%)
 - Stone Detection
 - Localization with Vumarks
 - IMU Interface
