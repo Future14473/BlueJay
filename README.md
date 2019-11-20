@@ -1,6 +1,6 @@
 # FTC Team #14473 Future - Image processing Framework [Currently in Intense Development]
 
-This library was made to simplify the confusing and often time-consuming code needed for Computer Vision.   
+This library was made to simplify the agony in doing FTC computer vision in Java.   
 It follows very simple rules:
 
 - It can be used for all seasons. This code will always be useful unless FTC changes their software setup.
