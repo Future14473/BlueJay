@@ -17,7 +17,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class FoundationPipeline {
+@Deprecated
+public class Foundationpipeline {
 
     Mat resizedImage = new Mat();
 
@@ -44,6 +45,16 @@ public class FoundationPipeline {
         System.runFinalization();
 
         Imgproc.resize(source0, resizedImage, new Size(640, 480), 0.0, 0.0, Imgproc.INTER_LINEAR);
+
+        for(int x=0; x<resizedImage.width();x++) {
+            for(int y=0; y<resizedImage.height();y++) {
+                double[] colDat = resizedImage.get(y,x);
+                //b,g,r
+                colDat[0]*=1.15;
+                colDat[2]*=0.86;
+                resizedImage.put(y,x,colDat);
+            }
+        }
 
         Mat original = resizedImage.clone();
 
@@ -97,7 +108,6 @@ public class FoundationPipeline {
         yellowOutput.release();
 
         //System.out.println("There are "+(hullsBlue.size()+hullsRed.size()+hullsBlack.size())+" matches");
-        int numBastards = 0;
 
         //populate array of detected (color only)
         List<Detected> detected = new ArrayList<Detected>();
@@ -108,19 +118,19 @@ public class FoundationPipeline {
             Detected toadd = new Detected(p, Detected.Color.RED);
             if (!toadd.isBastard) {
                 detected.add(toadd);
-            } else numBastards++;
+            }
         }
         for (MatOfPoint p : hullsBlue) {
             Detected toadd = new Detected(p, Detected.Color.BLUE);
             if (!toadd.isBastard) {
                 detected.add(toadd);
-            } else numBastards++;
+            } 
         }
         for (MatOfPoint p : hullsYellow) {
             Detected toadd = new Detected(p, Detected.Color.YELLOW);
             if (!toadd.isBastard) {
                 detected.add(toadd);
-            } else numBastards++;
+            }
         }
 
         //cut sides of color contours. Field walls are bad.
@@ -142,7 +152,7 @@ public class FoundationPipeline {
             Detected toadd = new Detected(p, Detected.Color.BLACK);
             if (!toadd.isBastard) {
                 blacks.add(toadd);
-            } else numBastards++;
+            }
         }
 
         for (Detected d : detected) {
@@ -429,6 +439,7 @@ public class FoundationPipeline {
     }
 }
 
+@Deprecated
 class Detected {
     enum Color {
         BLUE, RED, YELLOW, BLACK
@@ -483,6 +494,7 @@ class Detected {
 
 }
 
+@Deprecated
 class Foundation {
     enum Type {
         BLUEFOUNDATION, REDFOUNDATION, UNKNOWNFOUNDATION
@@ -507,7 +519,6 @@ class Foundation {
         Imgproc.rectangle(canvas, bounds.tl(), bounds.br(), new Scalar(255, 0, 0), 4);
         Imgproc.putText(canvas, t.toString(), bounds.tl(), Core.FONT_HERSHEY_SIMPLEX, 0.6, black, 7);
         Imgproc.putText(canvas, t.toString(), bounds.tl(), Core.FONT_HERSHEY_SIMPLEX, 0.6, color, 2);
-
     }
 
 }

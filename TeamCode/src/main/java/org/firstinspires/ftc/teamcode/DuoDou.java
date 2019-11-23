@@ -71,7 +71,9 @@ public class DuoDou extends LinearOpMode {
 
             foundation.print(foundation.getObjects());
 
-            stone.print(stone.getObjects());
+            foundation.printStones(foundation.getObjectsStones());
+
+            //stone.print(stone.getObjects());
 
             //imu.printposition(imu.getDeltaPosition());
 

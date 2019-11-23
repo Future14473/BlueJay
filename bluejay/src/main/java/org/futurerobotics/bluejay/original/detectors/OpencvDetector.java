@@ -6,11 +6,13 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.futurerobotics.bluejay.original.detectors.FoundationPipeline.Pipeline;
+import org.futurerobotics.bluejay.original.detectors.FoundationPipeline.Foundation;
+import org.futurerobotics.bluejay.original.detectors.FoundationPipeline.Stone;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,9 +29,10 @@ public class OpencvDetector implements Detector {
     Telemetry     telemetry;
     ImageDetector vuforia;
 
-    private Bitmap image; //raw image for camera
-    private Mat    Matimage; //image converted to OpenCV Mat
+    private Bitmap          image; //raw image for camera
+    private Mat             Matimage; //image converted to OpenCV Mat
     public List<Foundation> foundations = new ArrayList<Foundation>(); //detected foundations
+    public List<Stone>      stones      = new ArrayList<Stone>();
 
     volatile boolean activated = false;
 
@@ -70,12 +73,13 @@ public class OpencvDetector implements Detector {
         Utils.bitmapToMat(image, Matimage);
 
         //Opencv pipeline
-        FoundationPipeline fp = new FoundationPipeline();
-        fp.process(Matimage);
+        Pipeline.process(Matimage);
 
         foundations.clear();
+        foundations = new ArrayList<>(Pipeline.foundations);
 
-        foundations = new ArrayList<>(fp.foundations);
+        stones.clear();
+        stones = new ArrayList<>(Pipeline.stones);
     }
 
     /**
@@ -87,6 +91,12 @@ public class OpencvDetector implements Detector {
         if (!activated) return null;
 
         return foundations;
+    }
+
+    public List<Stone> getObjectsStones() {
+        if (!activated) return null;
+
+        return stones;
     }
 
     public void stop() {
@@ -102,7 +112,21 @@ public class OpencvDetector implements Detector {
 
         for(Foundation f : inp){
             // tabs not supported on tele
-            telemetry.addData("    Foundation", f.x+" "+f.y+" "+f.t.toString());
+            telemetry.addData("    Foundation", f.x+" "+f.y+" "+f.t);
+        }
+
+    }
+
+    public void printStones(List<Stone> inp) {
+
+        if (inp == null) {
+            telemetry.addData("OpenCV", "not available");
+            return;
+        }
+
+        for(Stone f : inp){
+            // tabs not supported on tele
+            telemetry.addData("    Stone", f.x+" "+f.y);
         }
 
     }
