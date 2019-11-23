@@ -1,6 +1,6 @@
 # FTC Team #14473 Future - Image processing Framework [Currently in Intense Development]
 
-This library was made to simplify the confusing and often time-consuming code needed for Computer Vision.   
+This library was made to simplify the agony in doing FTC computer vision in Java.   
 It follows very simple rules:
 
 - It can be used for all seasons. This code will always be useful unless FTC changes their software setup.
@@ -9,7 +9,7 @@ It follows very simple rules:
 
 ## Features
 
-- Foundation Detection (Pretty good 95%, waiting for Shawn to push)
+- Foundation Detection (Pretty good 95%) Pipeline: https://github.com/Future14473/CV-for-SkyStone-FTC/blob/master/bluejay/src/main/java/org/futurerobotics/bluejay/original/detectors/FoundationPipeline.java
 - Stone Detection
 - Localization with Vumarks
 - IMU Interface
@@ -105,10 +105,17 @@ Or:
 Everything else is the same, but the Stone detector will return `recognition` objects and the Cv detector will return `Point` objects. These are all well documented and each class has the method that will format and interpret it for you.
 
 A note: the IMU class, as a non-absolute Localizer, will always return the difference in position since __the last time you called its getter method__. That means that if the robot spins more than 360 degrees between that time, you will have an unreliable rotational reading.
-
-//TODO LocalizationManager
 	
 
 ## Contact
 If you got questions, email me at <xchenbox@gmail.com> or alternatively, find us on Facebook <https://www.facebook.com/future14473>
 We don't have a discord (yet). If there's any problems or ambiguity, shoot me an email
+
+## Gallery
+
+![Uno!](Gallery/ex.PNG)
+![Dos](Gallery/ex2.PNG)
+![liu](Gallery/exStone.PNG)
+![Threst](Gallery/Ex3.PNG)
+![si](Gallery/ex4.PNG)
+![wu](Gallery/ex6.PNG)
