@@ -115,6 +115,7 @@ We don't have a discord (yet). If there's any problems or ambiguity, shoot me an
 
 ![Uno!](Gallery/ex.PNG)
 ![Dos](Gallery/ex2.PNG)
+![liu](Gallery/exStone.PNG)
 ![Threst](Gallery/Ex3.PNG)
 ![si](Gallery/ex4.PNG)
 ![wu](Gallery/ex6.PNG)
