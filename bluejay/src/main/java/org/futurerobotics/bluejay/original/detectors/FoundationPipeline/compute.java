@@ -1,10 +1,5 @@
 package org.futurerobotics.bluejay.original.detectors.FoundationPipeline;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.Function;
-
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -12,10 +7,14 @@ import org.opencv.core.MatOfFloat;
 import org.opencv.core.MatOfInt;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
-import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
 
 public class compute {
 
@@ -74,19 +73,10 @@ public class compute {
         ArrayList<MatOfPoint> filteredcontours = new ArrayList<MatOfPoint>();
         ArrayList<MatOfPoint> hullsOutput = new ArrayList<MatOfPoint>();
 
-        // Step Find_Contours0:
-        Mat findContoursInput = inp;
-        boolean findContoursExternalOnly = true;
-        findContours(findContoursInput, findContoursExternalOnly, contours);
-
-        // Step Filter_Contours0:
-        ArrayList<MatOfPoint> filterContoursContours = contours;
-        double filterContoursMinArea = 800.0; //1000
-        filterContours(filterContoursContours, filterContoursMinArea,filteredcontours);
+        findContours(inp, true, contours);
 
         // Step Convex_Hulls0:
-        ArrayList<MatOfPoint> convexHullsContours = filteredcontours;
-        convexHulls(convexHullsContours, hullsOutput);
+        convexHulls(contours, hullsOutput);
 
         return hullsOutput;
     }
@@ -111,7 +101,7 @@ public class compute {
      * @param externalOnly Whether to ignore shapes inside shapes
      */
     static void findContours(Mat input, boolean externalOnly,
-                      List<MatOfPoint> contours) {
+                             List<MatOfPoint> contours) {
         Mat hierarchy = new Mat();
         contours.clear();
         int mode;
@@ -134,16 +124,17 @@ public class compute {
      * @param minArea        is the minimum area of a contour that will be kept
      */
     private static void filterContours(List<MatOfPoint> inputContours, double minArea, List<MatOfPoint> output) {
-        final MatOfInt hull = new MatOfInt();
-        output.clear();
-        //operation
-        for (int i = 0; i < inputContours.size(); i++) {
-            final MatOfPoint contour = inputContours.get(i);
-            final double area = Imgproc.contourArea(contour);
-            if (area < minArea) continue;
-
-            output.add(contour);
-        }
+//        final MatOfInt hull = new MatOfInt();
+//        output.clear();
+//        //operation
+//        for (int i = 0; i < inputContours.size(); i++) {
+//            final MatOfPoint contour = inputContours.get(i);
+//            final double area = Imgproc.contourArea(contour);
+//            if (area < minArea) continue;
+//
+//            output.add(contour);
+//        }
+        output = inputContours;
     }
 
     /**
@@ -169,7 +160,7 @@ public class compute {
     
     static Mat distanceTransform(Mat inp, int threshold) {
     	Mat proc = new Mat();
-    	Imgproc.distanceTransform(inp,proc,Imgproc.DIST_C,5);
+    	Imgproc.distanceTransform(inp,proc, Imgproc.DIST_C,5);
     	//Start.display(proc,1,"distTrans");
     	Core.inRange(proc,new Scalar(threshold), new Scalar(255), proc);
     	
@@ -249,14 +240,15 @@ public class compute {
 
           }
           double whiteSumAvg = whiteSum / whiteTot * 500;//width of the thing
-          double blackCutOff = whiteSumAvg * 1/6;
+          double blackCutOff = whiteSumAvg * 1/5;
 
           histData[0].release();
           histData[1].release();
           histData[2].release();
 
           return blackCutOff;
-      }
+
+     }
 
       static void getHistdataf(Mat in, int channel, Mat out, int histsize) {
 

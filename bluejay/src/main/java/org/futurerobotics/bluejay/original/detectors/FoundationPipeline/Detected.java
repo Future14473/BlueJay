@@ -1,7 +1,5 @@
 package org.futurerobotics.bluejay.original.detectors.FoundationPipeline;
 
-import java.util.Arrays;
-
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
@@ -10,7 +8,7 @@ import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
-import f.FoundationPipeline.Detected.Color;
+import java.util.Arrays;
 
 class Detected {
     enum Color {
@@ -26,11 +24,15 @@ class Detected {
 
     public Detected(MatOfPoint shape, Color c) {
         this.length = circularity(shape);
-        
-        if (length < 3)
-            isBastard = true; //We only like the long blacks. The short blacks will be disposed of
-        if (c != Color.BLACK)
-            isBastard = false;//colors means stacked blocks. Will not always be long shaped 
+
+        double size = Imgproc.contourArea(shape);
+        if(c== Color.BLACK){
+            if (length < 3)
+                isBastard = true; //We only like the long blacks. The short blacks will be disposed of
+           if(size<200) isBastard = true;
+        }else{
+            if(size<1800) isBastard = true;
+        }
         if(isBastard)return;
         
         this.shape = shape;

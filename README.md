@@ -9,8 +9,9 @@ It follows very simple rules:
 
 ## Features
 
-- Foundation Detection (Pretty good 95%) Pipeline: https://github.com/Future14473/CV-for-SkyStone-FTC/blob/master/bluejay/src/main/java/org/futurerobotics/bluejay/original/detectors/FoundationPipeline.java
-- Stone Detection
+- OpenCV Foundation Detection (Pretty good 95%) Pipeline: https://github.com/Future14473/CV-for-SkyStone-FTC/blob/master/bluejay/src/main/java/org/futurerobotics/bluejay/original/detectors/FoundationPipeline.java
+- Opencv Stone Detection (Pretty good 95%)
+- Tensorflow Stone Detection (not as good as openCV)
 - Localization with Vumarks
 - IMU Interface
 - All the above running simultaneously

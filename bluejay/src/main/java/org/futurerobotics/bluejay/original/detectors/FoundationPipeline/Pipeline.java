@@ -1,11 +1,13 @@
 package org.futurerobotics.bluejay.original.detectors.FoundationPipeline;
 
+import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,12 +21,12 @@ public class Pipeline {
     public static List<Stone> stones = new ArrayList<Stone>();
     
     //debug steps
-    public static  Mat red = new Mat();
-    public static  Mat blue = new Mat();
-    public static  Mat yellow = new Mat();
-    public static  Mat black = new Mat();
+    public static Mat red      = new Mat();
+    public static Mat blue     = new Mat();
+    public static Mat yellow   = new Mat();
+    public static Mat black    = new Mat();
+    public static int blackcut =0;
 
-    Mat histo = new Mat();
     /**
      * Give it the raw image and it will update the Foundations arraylist
      *
@@ -48,11 +50,12 @@ public class Pipeline {
         	});
          */
 		        
-        Mat original = resizedImage.clone(); 
+        Mat original = resizedImage.clone();
        
         //set ranges
         double blackCutOff = compute.getHistogramfast(resizedImage);
-        
+        blackcut= (int)blackCutOff;
+
         //For yellow
         double[] yellowRange = {80,105};
         
@@ -73,8 +76,8 @@ public class Pipeline {
         		compute.threshold(resizedImage, blueRange2, satRange, valRange));
 
         Mat blackOutput = compute.threshold(resizedImage,
-                new double[]{0, 180},//hue
-                new double[]{0, 180},//sat
+                new double[]{0, 180},//hue  0, 180
+                new double[]{0, 180},//sat  0, 180
                 new double[]{0, blackCutOff});//val
 
         //yellow stones face sideways, so there is less glare
@@ -84,20 +87,13 @@ public class Pipeline {
         		yellowRange, 
         		new double[]{170, 255}, valRange);
 
-        
-//        Start.display(blueOutput,1,"Blue");
-//        Start.display(redOutput,1,"Red");
-//        Start.display(yellowOutput,1,"Yellow");
-//        Start.display(blackOutput,1,"Black");
-        
-        
         //For debug display
         red = redOutput.clone();
         blue = blueOutput.clone();
         yellow = yellowOutput.clone();
         black = blackOutput.clone();
         
-        stones = computeStones(yellowOutput, original);
+        //stones = computeStones(yellowOutput, original);
         foundations = computeFoundations(redOutput, blueOutput, yellowOutput, blackOutput, original);
         
         for (Stone s : stones) {
@@ -199,6 +195,9 @@ public class Pipeline {
         //process sandwiches, populate foundation ArrayList
         List<Foundation> foundations = new ArrayList<Foundation>();
 
+        Imgproc.putText(canvas, String.valueOf(blackcut), new Point(20,20), Core.FONT_HERSHEY_SIMPLEX, 0.6, new Scalar(0,0,0), 7);
+        Imgproc.putText(canvas, String.valueOf(blackcut), new Point(20,20), Core.FONT_HERSHEY_SIMPLEX, 0.6, new Scalar(255,255,0), 2);
+
         for (Detected d : blacks) {
             for (Detected j : detected) {
                 if (Math.abs(d.x - j.x) < 120 &&
@@ -208,7 +207,7 @@ public class Pipeline {
                 }
             }
         }
-        
+
         return foundations;
     }
 

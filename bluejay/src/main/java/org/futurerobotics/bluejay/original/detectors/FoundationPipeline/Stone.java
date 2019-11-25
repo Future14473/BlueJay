@@ -1,7 +1,5 @@
 package org.futurerobotics.bluejay.original.detectors.FoundationPipeline;
 
-import java.util.Arrays;
-
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
