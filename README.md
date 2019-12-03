@@ -1,3 +1,4 @@
+![Blue](Gallery/BlueJay Logo.PNG)
 # FTC Team #14473 Future - Image processing Framework [Currently in Intense Development]
 
 This library was made to simplify the agony in doing FTC computer vision in Java.   
