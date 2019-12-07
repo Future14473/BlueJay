@@ -1,6 +1,9 @@
 ![Blue](Gallery/BlueJaylogo.png)
 # FTC Team #14473 Future - Image processing Framework [Currently in Intense Development]
 
+<img src="Gallery/sample.png" alt="Kitten"
+	title="A cute kitten" width="550" height="300" />
+	
 This library was made to simplify the agony in doing FTC computer vision in Java.   
 It follows very simple rules:
 
