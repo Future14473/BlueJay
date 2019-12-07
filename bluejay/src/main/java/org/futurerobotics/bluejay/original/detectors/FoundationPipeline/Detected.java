@@ -63,8 +63,8 @@ class Detected {
         Scalar black = new Scalar(0, 0, 0);
 
         Imgproc.drawContours(canvas, Arrays.asList(shape), 0, color, 2);
-        Imgproc.putText(canvas, c.toString(), new Point(x, y - 30), Core.FONT_HERSHEY_SIMPLEX, 0.6, black, 7);
-        Imgproc.putText(canvas, c.toString(), new Point(x, y - 30), Core.FONT_HERSHEY_SIMPLEX, 0.6, color, 2);
+        Imgproc.putText(canvas, c.toString(), bounds.tl(), Core.FONT_HERSHEY_SIMPLEX, 0.6, black, 7);
+        Imgproc.putText(canvas, c.toString(), bounds.tl(), Core.FONT_HERSHEY_SIMPLEX, 0.6, color, 2);
         Imgproc.circle(canvas, new Point(x, y), 4, new Scalar(255, 255, 255), -1);
     }
 

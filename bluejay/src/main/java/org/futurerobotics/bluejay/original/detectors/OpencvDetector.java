@@ -24,10 +24,9 @@ public class OpencvDetector implements Detector {
         //OR System.LoadLibrary("opencv_java3");
     }
 
-    private OpMode opMode;
-    HardwareMap   hardwareMap;
-    Telemetry     telemetry;
-    ImageDetector vuforia;
+    private HardwareMap hardwareMap;
+    private Telemetry     telemetry;
+    private ImageDetector vuforia;
 
     private Bitmap          image; //raw image for camera
     private Mat             Matimage; //image converted to OpenCV Mat
@@ -37,7 +36,6 @@ public class OpencvDetector implements Detector {
     volatile boolean activated = false;
 
     Thread run = new Thread() {
-        @Override
         public void run() {
             while (activated) {
                 updateObjects();
@@ -46,7 +44,6 @@ public class OpencvDetector implements Detector {
     };
 
     public OpencvDetector(OpMode opMode) {
-        this.opMode = opMode;
         this.hardwareMap = opMode.hardwareMap;
         this.telemetry = opMode.telemetry;
 

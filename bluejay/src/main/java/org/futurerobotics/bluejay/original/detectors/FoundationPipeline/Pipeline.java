@@ -27,16 +27,22 @@ public class Pipeline {
     public static Mat black    = new Mat();
     public static int blackcut =0;
 
+    public static Mat process(Mat source0){
+        //return process(source0, 640, 480);
+        return process(source0, 3264/4, 2448/4);
+    }
+
     /**
      * Give it the raw image and it will update the Foundations arraylist
      *
      * @return source image with annotations on it
      */
-    public static Mat process(Mat source0) {
+    public static Mat process(Mat source0, double width, double height) {
         System.gc();
         System.runFinalization();
 
-        Imgproc.resize(source0, resizedImage, new Size(640*1, 480*1), 0.0, 0.0, Imgproc.INTER_LINEAR);
+        //default image size: 3264 x 2448
+        Imgproc.resize(source0, resizedImage, new Size(width*1, height*1), 0.0, 0.0, Imgproc.INTER_LINEAR);
 		
         //white balance
         /*
@@ -56,6 +62,7 @@ public class Pipeline {
         double blackCutOff = compute.getHistogramfast(resizedImage);
         blackcut= (int)blackCutOff;
 
+
         //For yellow
         double[] yellowRange = {80,105};
         
@@ -66,7 +73,20 @@ public class Pipeline {
         //for Red
         double[] redRange = {110,120};
 
-        double[] satRange = {60, 255};
+
+        /*
+        //For yellow
+        double[] yellowRange = {73,86};
+
+        //For Blue
+        double[] blueRange1 = {160,180};
+        double[] blueRange2 = {0,20};
+
+        //for Red
+        double[] redRange = {40,63};
+        */
+
+        double[] satRange = {80, 255};
         double[] valRange = {blackCutOff*0.7, 255};
 
         Mat redOutput = compute.threshold(resizedImage, redRange, satRange, valRange);
@@ -75,8 +95,9 @@ public class Pipeline {
         		compute.threshold(resizedImage, blueRange1, satRange, valRange),
         		compute.threshold(resizedImage, blueRange2, satRange, valRange));
 
-        Mat blackOutput = compute.threshold(resizedImage,
-                new double[]{0, 180},//hue  0, 180
+        Mat blackOutput = compute.threshold(
+                resizedImage,
+                new double[]{0, 255},//hue  0, 180
                 new double[]{0, 180},//sat  0, 180
                 new double[]{0, blackCutOff});//val
 
@@ -85,7 +106,8 @@ public class Pipeline {
         Mat yellowOutput = compute.threshold(
         		resizedImage, 
         		yellowRange, 
-        		new double[]{170, 255}, valRange);
+        		new double[]{150, 255},//sat
+                new double[]{blackCutOff*1.5, 255}); //val
 
         //For debug display
         red = redOutput.clone();
@@ -93,7 +115,7 @@ public class Pipeline {
         yellow = yellowOutput.clone();
         black = blackOutput.clone();
         
-        //stones = computeStones(yellowOutput, original);
+        stones = computeStones(yellowOutput, original);
         foundations = computeFoundations(redOutput, blueOutput, yellowOutput, blackOutput, original);
         
         for (Stone s : stones) {
@@ -186,11 +208,11 @@ public class Pipeline {
             }
         }
 
-        for (Detected d : detected) {
-            d.draw(canvas);
-        }for (Detected d : blacks) {
-            d.draw(canvas);
-        }
+//        for (Detected d : detected) {
+//            d.draw(canvas);
+//        }for (Detected d : blacks) {
+//            d.draw(canvas);
+//        }
 
         //process sandwiches, populate foundation ArrayList
         List<Foundation> foundations = new ArrayList<Foundation>();
