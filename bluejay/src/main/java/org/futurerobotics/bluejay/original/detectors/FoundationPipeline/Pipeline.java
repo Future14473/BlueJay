@@ -59,66 +59,15 @@ public class Pipeline {
         //set ranges
         double blackCutOff = compute.getHistogramfast(resizedImage);
         blackcut= (int)blackCutOff;
+        blackcut= (int)85;
 
-        //For Blue
-        double[] blueRange1 = {170,180};
-        double[] blueRange2 = {0,10};
+        Constants.updateColors(resizedImage, equalizedImage, blackCutOff);
 
-        //for Red
-        double[] redRange = {110,120};
-
-
-        /*
-        //For yellow
-        double[] yellowRange = {73,86};
-
-        //For Blue
-        double[] blueRange1 = {160,180};
-        double[] blueRange2 = {0,20};
-
-        //for Red
-        double[] redRange = {40,63};
-        */
-
-        double[] satRange = {80, 255};
-        double[] valRange = {blackCutOff*0.7, 255};
-
-        Mat redOutput = compute.threshold(resizedImage, redRange, satRange, valRange);
-
-        Mat blueOutput = compute.combine(
-                compute.threshold(resizedImage, blueRange1, satRange, valRange),
-                compute.threshold(resizedImage, blueRange2, satRange, valRange));
-
-        Mat blackOutput = compute.threshold(
-                resizedImage,
-                new double[]{0, 255},//hue  0, 180
-                new double[]{0, 180},//sat  0, 180
-                new double[]{0, blackCutOff*0.8});//val
-
-
-        //For yellow HUE HUE HUE
-        double[] yellowRange = {7+67,38+67};
-        double[] stressedYellowRange = {-12+67,45+67};
-
-        //STONE STONE STONE
-        Mat yellowOutput = compute.threshold( //equalize to spread. yellowRange to be less
-        		equalizedImage,
-        		yellowRange,
-        		new double[]{100, 255},//sat
-                new double[]{blackCutOff*1.0, 255}); //val
-
-        //SKYSTONE SKYSTONE
-        Mat yellowTags = compute.threshold(  //just want all of it
-        		resizedImage,
-        		stressedYellowRange,
-        		new double[]{120, 255},//sat
-                new double[]{blackCutOff*0.7, 255}); //val
-
-//        Mat yellowTags = compute.threshold(
-//                resizedImage,
-//                new double[]{80,105},
-//                new double[]{100, 255},//sat
-//                new double[]{blackCutOff*1.5, 255}); //val
+        Mat redOutput   = Constants.redOutput;
+        Mat blueOutput  = Constants.blueOutput;
+        Mat blackOutput = Constants.blackOutput;
+        Mat yellowOutput= Constants.yellowOutput;
+        Mat yellowTags  = Constants.yellowTags;
 
         //For debug display
         red = redOutput.clone();
@@ -152,7 +101,7 @@ public class Pipeline {
 
     static List<SkyStone> computeSkyStones(Mat yellowTags, Mat canvas){
         //morph
-        yellowTags = compute.fillHoro(yellowTags);
+        //yellowTags = compute.fillHoro(yellowTags);
 
         List<SkyStone> skyStones = new ArrayList<SkyStone>();
 
@@ -168,6 +117,17 @@ public class Pipeline {
                 -1);
 
         yellowTags = compute.flip(yellowTags);
+        //NEEDS TO BE FUCKING CONNECTED TO BORDER
+        //Imgproc.floodFill(yellowTags, new Mat(482,642,yellowTags.type()), new Point(1,479), new Scalar(0,0,0));
+        compute.floodFill(yellowTags,new Point(639,380));
+
+        compute.floodFill(yellowTags,new Point(639,479));
+        compute.floodFill(yellowTags,new Point(440,479));
+        compute.floodFill(yellowTags,new Point(200,479));
+        compute.floodFill(yellowTags,new Point(1  ,479));
+
+        compute.floodFill(yellowTags,new Point(1,380));
+        //compute.rectangle(yellowTags);
 
         List<MatOfPoint> internalHulls = compute.findHulls(yellowTags);
         internalHulls = compute.filterContours(internalHulls,1200);

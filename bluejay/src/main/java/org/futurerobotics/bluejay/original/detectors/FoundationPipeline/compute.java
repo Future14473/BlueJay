@@ -149,6 +149,14 @@ public class compute {
         return output;
     }
 
+    static void floodFill(Mat canvas, Point origin) {
+        double[] pixel = canvas.get((int)origin.y,(int)origin.x);
+        if(pixel[0]==0)
+            return;
+
+        Imgproc.floodFill(canvas, new Mat(canvas.height()+2,canvas.width()+2,canvas.type()), origin, new Scalar(0,0,0));
+    }
+
     /**
      * Compute the convex hulls of contours.
      */
