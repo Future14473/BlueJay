@@ -30,8 +30,8 @@ public class Foundation {
         Scalar black = new Scalar(0, 0, 0);
 
         Imgproc.rectangle(canvas, bounds.tl(), bounds.br(), new Scalar(255, 0, 0), 4);
-        Imgproc.putText(canvas, t.toString(), bounds.tl(), Core.FONT_HERSHEY_SIMPLEX, 0.6, black, 7);
-        Imgproc.putText(canvas, t.toString(), bounds.tl(), Core.FONT_HERSHEY_SIMPLEX, 0.6, color, 2);
+        Imgproc.putText(canvas, t.toString(), new Point(bounds.tl().x,bounds.tl().y+20), Core.FONT_HERSHEY_SIMPLEX, 0.6, black, 7);
+        Imgproc.putText(canvas, t.toString(), new Point(bounds.tl().x,bounds.tl().y+20), Core.FONT_HERSHEY_SIMPLEX, 0.6, color, 2);
 
     }
     
@@ -51,7 +51,7 @@ public class Foundation {
         for(int i = blackPoints.length;i<allTogetherNow.length;i++) {
         	allTogetherNow[i]=colorPoints[i-blackPoints.length];
         }
-        
+
         //draw Rectangle around them
         Rect foundationbound = Imgproc.boundingRect(new MatOfPoint(allTogetherNow));
 

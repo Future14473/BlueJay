@@ -7,6 +7,7 @@ import org.opencv.core.MatOfFloat;
 import org.opencv.core.MatOfInt;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
+import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
@@ -60,13 +61,16 @@ public class compute {
 
         return output;
     }
-
+    
+    static ArrayList<MatOfPoint> findHulls(Mat inp) {
+    	return findHulls(inp,false);
+    }
     /**
      * Returns a matrix of points representing the convex hulls of the blobs in the input
      *
      * @param inp a binary image
      */
-    static ArrayList<MatOfPoint> findHulls(Mat inp) {
+    static ArrayList<MatOfPoint> findHulls(Mat inp, boolean external) {
     	rectangle(inp);
     	
         ArrayList<MatOfPoint> contours = new ArrayList<MatOfPoint>();
@@ -81,17 +85,19 @@ public class compute {
         return hullsOutput;
     }
 
+    static void drawHulls(List<MatOfPoint> hulls, Mat drawOn) {
+    	Scalar color = new Scalar(0, 255, 0);   // Green
+    	drawHulls(hulls, drawOn,  color,1);
+    }
     /**
      * Takes a point matrix and draws the shape it represents on the Mat input
      *
      * @param drawOn thing that gets drawn on
      */
-    void drawHulls(ArrayList<MatOfPoint> hulls, Mat drawOn) {
+    static void drawHulls(List<MatOfPoint> hulls, Mat drawOn, Scalar color, int thick) {
         //draw convex hulls
-        Scalar color = new Scalar(0, 255, 0);   // Green
-
         for (int i = 0; i < hulls.size(); i++) {
-            Imgproc.drawContours(drawOn, hulls, i, color);
+            Imgproc.drawContours(drawOn, hulls, i, color,thick);
         }
     }
 
@@ -118,23 +124,29 @@ public class compute {
 
     /**
      * Filters out contours that do not meet certain criteria.
+     * Also removes contours surrounding everything
      *
      * @param inputContours  is the input list of contours
-     * @param output         is the the output list of contours
+     * @return is the the output list of contours
      * @param minArea        is the minimum area of a contour that will be kept
      */
-    private static void filterContours(List<MatOfPoint> inputContours, double minArea, List<MatOfPoint> output) {
-//        final MatOfInt hull = new MatOfInt();
-//        output.clear();
-//        //operation
-//        for (int i = 0; i < inputContours.size(); i++) {
-//            final MatOfPoint contour = inputContours.get(i);
-//            final double area = Imgproc.contourArea(contour);
-//            if (area < minArea) continue;
-//
-//            output.add(contour);
-//        }
-        output = inputContours;
+    static List<MatOfPoint> filterContours(List<MatOfPoint> inputContours, double minArea) {
+        List<MatOfPoint> output = new ArrayList<MatOfPoint>();
+        //operation
+        for (int i = 0; i < inputContours.size(); i++) {
+            final MatOfPoint contour = inputContours.get(i);
+            final double area = Imgproc.contourArea(contour);
+            if (area < minArea) continue;
+            Point tl = Imgproc.boundingRect(contour).tl();
+            Rect b = Imgproc.boundingRect(contour);
+            if(tl.x<5 & tl.y<5)continue;
+            if(b.width>636 || b.height>475)continue;
+
+            output.add(contour);
+        }
+
+
+        return output;
     }
 
     /**
@@ -160,10 +172,32 @@ public class compute {
     
     static Mat distanceTransform(Mat inp, int threshold) {
     	Mat proc = new Mat();
-    	Imgproc.distanceTransform(inp,proc, Imgproc.DIST_C,5);
-    	//Start.display(proc,1,"distTrans");
-    	Core.inRange(proc,new Scalar(threshold), new Scalar(255), proc);
-    	
+    	/*
+    		Imgproc.distanceTransform(inp,proc, Imgproc.DIST_C,5);
+    		
+    		Core.inRange(proc,new Scalar(threshold), new Scalar(255), proc);
+    	*/
+    	Imgproc.erode(inp,proc,
+    			Imgproc.getStructuringElement(
+    					Imgproc.MORPH_RECT,
+    					new Size(2,40),
+    					new Point(0,39)
+    				));
+    	return proc;
+    }
+    static Mat fillHoro(Mat inp) {
+    	Mat proc = new Mat();
+    	/*
+    		Imgproc.distanceTransform(inp,proc, Imgproc.DIST_C,5);
+    		
+    		Core.inRange(proc,new Scalar(threshold), new Scalar(255), proc);
+    	*/
+    	Imgproc.dilate(inp,proc,
+    			Imgproc.getStructuringElement(
+    					Imgproc.MORPH_RECT,
+    					new Size(10,1),
+    					new Point(5,0)
+    				));
     	return proc;
     }
     
@@ -177,6 +211,27 @@ public class compute {
     	
     	return ret;
     }
+    static Mat subtract(Mat one, Mat two) {
+    	Mat ret = new Mat();
+    	
+    	Core.subtract(one, two, ret);
+    	
+    	return ret;
+    }
+    static Mat add(Mat one, Mat two) {
+    	Mat ret = new Mat();
+    	
+    	Core.add(one, two, ret);
+    	
+    	return ret;
+    }
+    static Mat flip(Mat one) {
+    	Mat ret = new Mat();
+    	
+    	Core.bitwise_not(one, ret);
+    	
+    	return ret;
+    }
     
     static void forEach(Mat m, Function<double[], double[]> f) {
     	for(int x=0; x<m.width();x++) {
@@ -187,7 +242,29 @@ public class compute {
 	        }
         }
     }
+
+    static void whiteBalance(Mat canvas, double blueC, double redC) {
+        compute.forEach(canvas,
+                (double[] d) -> {
+                    //b,g,r
+                    d[0]*=blueC;
+                    d[2]*=redC;
+
+                    return d;
+                });
+    }
     
+    static Mat equalize(Mat inp) {
+    	Mat out = new Mat();
+    	
+    	List<Mat> channels = new ArrayList<Mat>();
+        Core.split(inp,channels);
+        for (Mat mat : channels) {
+			Imgproc.equalizeHist(mat, mat);
+		}
+        Core.merge(channels,out);
+        return out;
+    }
     
     //============Histogram================
     //============Histogram================

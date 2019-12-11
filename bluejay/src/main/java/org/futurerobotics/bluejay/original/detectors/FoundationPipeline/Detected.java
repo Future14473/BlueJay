@@ -27,11 +27,11 @@ class Detected {
 
         double size = Imgproc.contourArea(shape);
         if(c== Color.BLACK){
-            if (length < 3)
-                isBastard = true; //We only like the long blacks. The short blacks will be disposed of
+            if (length < 1)
+                isBastard = true; 
            if(size<200) isBastard = true;
         }else{
-            if(size<1800) isBastard = true;
+            if(size<1300) isBastard = true;
         }
         if(isBastard)return;
         
@@ -52,10 +52,13 @@ class Detected {
     }
 
     //We will cheat and do width/height because the correct calculation is expensive
+    //higher is longer
     double circularity(MatOfPoint inp) {
         final Rect bb = Imgproc.boundingRect(inp);
         final double ratio = bb.width / (double) bb.height;
         return ratio;
+    	//double perimeter = Imgproc.arcLength(new MatOfPoint2f(inp.toArray()),true);
+    	//return (Math.PI * perimeter * perimeter) / (4 * Imgproc.contourArea(inp));
     }
 
     public void draw(Mat canvas) {
@@ -63,8 +66,8 @@ class Detected {
         Scalar black = new Scalar(0, 0, 0);
 
         Imgproc.drawContours(canvas, Arrays.asList(shape), 0, color, 2);
-        Imgproc.putText(canvas, c.toString(), bounds.tl(), Core.FONT_HERSHEY_SIMPLEX, 0.6, black, 7);
-        Imgproc.putText(canvas, c.toString(), bounds.tl(), Core.FONT_HERSHEY_SIMPLEX, 0.6, color, 2);
+        Imgproc.putText(canvas, c.toString(), new Point(bounds.tl().x,bounds.tl().y+20), Core.FONT_HERSHEY_SIMPLEX, 0.6, black, 7);
+        Imgproc.putText(canvas, c.toString(), new Point(bounds.tl().x,bounds.tl().y+20), Core.FONT_HERSHEY_SIMPLEX, 0.6, color, 2);
         Imgproc.circle(canvas, new Point(x, y), 4, new Scalar(255, 255, 255), -1);
     }
 
