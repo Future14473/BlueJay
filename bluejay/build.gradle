@@ -1,21 +1,5 @@
-apply plugin: 'com.jfrog.bintray'
 apply plugin: 'com.android.library'
 
-publish {
-
-    def groupProjectID = 'org.futurerobotics.BlueJay'
-    def artifactProjectID = 'BlueJay'
-    def publishVersionID = '0.6.0'
-
-
-    repoName = 'CV-for_Skytone-FTC'
-    groupId = groupProjectID
-    artifactId = artifactProjectID
-    publishVersion = publishVersionID
-    desc = 'Custom OpenCV library for Foundation and Stone Detection'
-    website = 'https://github.com/Future14473/CV-for-SkyStone-FTC'
-
-}
 
 android {
     compileSdkVersion 28
@@ -23,7 +7,7 @@ android {
 
 
     defaultConfig {
-        minSdkVersion 19
+        minSdkVersion 23
         targetSdkVersion 28
 
         versionCode 1
@@ -38,6 +22,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
     }
 
 }
@@ -60,6 +48,3 @@ dependencies {
     implementation (name: 'RobotCore-release', ext: 'aar')
     implementation (name: 'Hardware-release', ext: 'aar')
 }
-
-apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
-apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'

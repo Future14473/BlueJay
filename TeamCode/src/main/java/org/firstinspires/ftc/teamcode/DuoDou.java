@@ -30,17 +30,17 @@
 
 package org.firstinspires.ftc.teamcode;
 
-
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.HardwareDevice;
 import org.futurerobotics.bluejay.original.detectors.ImageDetector;
-import org.futurerobotics.bluejay.original.detectors.OpencvDetector;
+import org.futurerobotics.bluejay.original.detectors.OpenCvDetector;
 import org.futurerobotics.bluejay.original.detectors.StoneDetector;
-
-import java.util.Iterator;
 
 @TeleOp(name = "The Three <<Holy Systems>>", group = "Primordial Artifact")
 public class DuoDou extends LinearOpMode {
-
-    public void runOpMode() throws InterruptedException {
+	
+	public void runOpMode() {
 //        try {
 //            ExpansionHubEx hub = new ExpansionHubEx((LynxModule) (hardwareMap.get("Expansion Hub Portal 1")));
 //            hub.setPhoneChargeEnabled(true);
@@ -50,54 +50,52 @@ public class DuoDou extends LinearOpMode {
 //            telemetry.addData("excpetion!", e.toString());
 //            telemetry.update();
 //        }
-        telemetry.setAutoClear(true);
-
-        telemetry.addData("Booting Up", " . . .");
-        telemetry.update();
-
-        OpencvDetector foundation = new OpencvDetector(this);
-        ImageDetector detector = new ImageDetector(this, false);
-        StoneDetector stone = new StoneDetector(this, false);
-
-        stone.start();
-        detector.start();
-        foundation.start();
-        //imu.start();
-
-        while (!isStopRequested()) {
-            detector.printposition(detector.getPosition());
-
-            foundation.print(foundation.getObjects());
-
-            foundation.printStones(foundation.getObjectsStones());
-
-            //stone.print(stone.getObjects());
-
-            //imu.printposition(imu.getDeltaPosition());
-
-            telemetry.addData("==========", "Loop delimiter");
-
-            telemetry.update();
-        }
-
-        // Disable Tracking when we are done
-        detector.stop();
-        stone.stop();
-        foundation.stop();
-        //imu.stop();
-    }
+		telemetry.setAutoClear(true);
+		
+		telemetry.addData("Booting Up", " . . .");
+		telemetry.update();
+		
+		OpenCvDetector foundation = new OpenCvDetector(this);
+		ImageDetector detector = new ImageDetector(this, false);
+		StoneDetector stone = new StoneDetector(this, false);
+		
+		stone.start();
+		detector.start();
+		foundation.start();
+		//imu.start();
+		
+		while (!isStopRequested()) {
+//            detector.printposition(detector.getPosition());
+//
+//            foundation.print(foundation.getObjects());
+//
+//            foundation.printStones(foundation.getObjectsStones());
+			
+			//stone.print(stone.getObjects());
+			
+			//imu.printposition(imu.getDeltaPosition());
+			
+			telemetry.addData("==========", "Loop delimiter");
+			
+			telemetry.update();
+		}
+		
+		// Disable Tracking when we are done
+		detector.stop();
+		stone.stop();
+		foundation.stop();
+		//imu.stop();
+	}
 
     public void listhardware() {
-        telemetry.setAutoClear(false);
-
-        Iterator<com.qualcomm.robotcore.hardware.HardwareDevice> t = hardwareMap.iterator();
-        while (t.hasNext()) {
-
-            telemetry.addData("device found", (t.next().getDeviceName()));
-            telemetry.update();
-        }
-
-        telemetry.setAutoClear(true);
-
+	    telemetry.setAutoClear(false);
+	
+	    for (HardwareDevice hardwareDevice : hardwareMap) {
+		
+		    telemetry.addData("device found", (hardwareDevice.getDeviceName()));
+		    telemetry.update();
+	    }
+	
+	    telemetry.setAutoClear(true);
     }
 }
