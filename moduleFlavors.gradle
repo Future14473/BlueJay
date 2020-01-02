@@ -29,7 +29,7 @@ android {
         extremeTurbo {
             res.srcDirs = ['src/openftc/res', 'src/extremeTurbo/res']
             java.srcDirs = ['src/openftc/java', 'src/extremeTurbo/java']
-            //resources.srcDirs = ['src/openftc/java', 'src/extremeTurbo/java']
+            resources.srcDirs = ['src/openftc/java', 'src/extremeTurbo/java']
         }
     }
 
