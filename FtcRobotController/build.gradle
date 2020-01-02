@@ -27,7 +27,6 @@ dependencies {
     turboApi project(':FtcCommon')
     turboApi project(':RobotCore')
     turboApi project(':Inspection')
-    turboApi project(':Blocks')
     turboApi project(':Hardware')
     turboApi project(':RobotServer')
     turboApi project(':OpenRC')
@@ -45,6 +44,7 @@ dependencies {
     stockApi 'org.openftc:hardware-stock:5.3'
     stockApi 'org.openftc:onbotjava-stock:5.3'
     stockApi 'org.openftc:robotserver-stock:5.3'
+    //noinspection GradleDependency
     stockApi 'com.android.support:support-compat:26.0.0'
 
     /*
