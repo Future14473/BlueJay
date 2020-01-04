@@ -1,6 +1,7 @@
-package org.firstinspires.ftc.teamcode
+package org.firstinspires.ftc.teamcode.ftcsystem
 
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import org.firstinspires.ftc.teamcode.system.BotSystem
 import org.firstinspires.ftc.teamcode.system.CoroutineScopeElement
 import org.firstinspires.ftc.teamcode.system.Element
@@ -32,6 +33,9 @@ abstract class BotSystemsOpMode(
         (cls ?: element) to element
     }
 
+    protected lateinit var botSystem: BotSystem
+        private set
+
 
     final override fun getCoroutineContext(): CoroutineContext =
         (elementsMap[CoroutineScopeElement::class.java] as CoroutineScopeElement?)?.coroutineContext
@@ -44,9 +48,15 @@ abstract class BotSystemsOpMode(
     final override suspend fun runOpMode() = coroutineScope {
         replaceElement(OpModeElement(this@BotSystemsOpMode))
         replaceElement(CoroutineScopeElement(this))
-        val system = BotSystem(elementsMap.values)
-        system.initSuspend()
+        botSystem = BotSystem(elementsMap.values)
+        botSystem.initSuspend()
+        launch {
+            additionalRun()
+        }
         waitForStart()
-        system.start()
+        botSystem.start()
+    }
+
+    protected open suspend fun additionalRun() {
     }
 }

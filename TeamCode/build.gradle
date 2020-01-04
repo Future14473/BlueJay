@@ -26,7 +26,7 @@ dependencies {
 //    //todo: Make not local.
 //    implementation "org.futurerobotics.jargon:core:0.1.0-SNAPSHOT"
 //    implementation "org.futurerobotics.jargon:coroutine-support:0.1.0-SNAPSHOT"
-//    implementation "org.futurerobotics.jargon:ftc-bridge:0.1.0-SNAPSHOT"
+    implementation "org.futurerobotics.jargon:ftc-bridge:0.1.0-SNAPSHOT"
     implementation "org.futurerobotics.ftcutils:coroutine-opmode:0.1.0-SNAPSHOT"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

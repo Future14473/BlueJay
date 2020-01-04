@@ -37,7 +37,7 @@ class BotSystemTest {
 }
 
 private class Dependency1 : DelegatesElement() {
-    private val aThing by botSystem.getting(Dependency2::class.java) { thing }
+    private val aThing by botSystem(Dependency2::class) { thing }
 
     override fun moreInit(botSystem: BotSystem) {
         println(aThing)
@@ -79,7 +79,7 @@ private class Send : CoroutineElement() {
 }
 
 private class Receive : CoroutineElement() {
-    private val send: Send by botSystem
+    private val send: Send by botSystem()
     override fun moreInit1(botSystem: BotSystem) {
     }
 

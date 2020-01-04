@@ -125,9 +125,11 @@ open class BotSystem(initialElements: Collection<Element>) {
                 it.onStart(this@BotSystem)
         }
     }
+
+
+    inline fun <reified T : Element> get() = get(T::class.java)
+    inline fun <reified T : Element> BotSystem.tryGet() = tryGet(T::class.java)
 }
 
 private fun <T> MutableIterable<T>.removeFirst(): T = iterator().run { next().also { remove() } } //ha! one line!
 
-inline fun <reified T : Element> BotSystem.get() = get(T::class.java)
-inline fun <reified T : Element> BotSystem.tryGet() = tryGet(T::class.java)
