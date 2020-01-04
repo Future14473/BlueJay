@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode.system
 
+import android.support.annotation.CallSuper
 import kotlinx.coroutines.runBlocking
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Modifier
 import java.util.*
+import kotlin.reflect.KClass
+import kotlin.reflect.KProperty
 
 
 /**
@@ -99,10 +102,116 @@ suspend fun Element.initSuspend(botSystem: BotSystem) =
 /**
  * Skeletal implementation of [Element].
  *
- * [dependsOn] may have duplicates but they will be removed.
+ * One can declare additional using the [dependsOn] function, during construction, or by passing to super varargs
+ *
+ * One can also use the functions [botSystem] and [onInit] to get a [Property]
+ * that will retrieve values when [init] is called.
  */
-abstract class AbstractElement constructor(vararg dependsOn: Class<out Element>) : Element {
+abstract class AbstractElement(vararg dependsOn: Class<out Element>) : Element {
 
-    final override val dependsOn: Set<Class<out Element>> = Collections.unmodifiableSet(dependsOn.toSet())
+    private val delegates = mutableListOf<BotSystemGettingDelegate<*>>()
+    private val _dependsOn = dependsOn.toHashSet()
+    final override val dependsOn: Set<Class<out Element>> = Collections.unmodifiableSet(_dependsOn)
+
+    @CallSuper
+    override fun init(botSystem: BotSystem) {
+        delegates.forEach {
+            it.init(botSystem)
+        }
+    }
+
+    /** Declares additional dependencies on the given [classes]. */
+    protected fun dependsOn(vararg classes: Class<out Element>) {
+        _dependsOn += classes
+    }
+
+    /** Declares additional dependencies on the given class */
+    @JvmSynthetic
+    protected inline fun <reified T : Element> dependsOn() {
+        dependsOn(T::class.java)
+    }
+
+    /** Declares additional dependencies on the given [classes]. */
+    @JvmSynthetic
+    protected fun dependsOn(vararg classes: KClass<out Element>) {
+        _dependsOn += classes.map { it.java }
+    }
+
+    /**
+     * Gets a [Property] which will have the value the element by the given [clazz] on init.
+     *
+     * This also ensures the given [clazz] is a dependency.
+     */
+    protected fun <T : Element> botSystem(clazz: Class<T>): Property<T> {
+        this._dependsOn += clazz
+        return BotSystemGettingDelegate { get(clazz) }
+    }
+
+
+    /**
+     * Gets a [Property] which will have the value the element by the given [clazz], then called on [getValue], on init.
+     *
+     * This also ensures the given [clazz] is a dependency.
+     */
+    protected fun <T : Element, R> botSystem(clazz: Class<T>, getValue: T.() -> R): Property<R> {
+        this._dependsOn += clazz
+        return BotSystemGettingDelegate { get(clazz).getValue() }
+    }
+
+    /** [botSystem] for Kotlin */
+    @JvmSynthetic
+    protected fun <T : Element> botSystem(clazz: KClass<T>): Property<T> = botSystem(clazz.java)
+
+    /** [botSystem] for Kotlin */
+    @JvmSynthetic
+    protected fun <T : Element, R> botSystem(clazz: KClass<T>, getValue: T.() -> R): Property<R> =
+        botSystem(clazz.java, getValue)
+
+    @JvmSynthetic
+    protected inline fun <reified T : Element> botSystem() = botSystem(T::class.java)
+
+    /**
+     * Gets a [Property] which will have the value given by the [getValue] on init, with the [botSystem] passed.
+     *
+     * These will run with properties gotten by [botSystem] in the same order they were declared.
+     */
+    protected fun <R> onInit(getValue: BotSystem.() -> R): Property<R> = BotSystemGettingDelegate(getValue)
+
+    private object NoValue
+
+    private inner class BotSystemGettingDelegate<R>(
+        private var getValue: (BotSystem.() -> R)?
+    ) : Property<R> {
+
+        init {
+            @Suppress("LeakingThis")
+            delegates += this
+        }
+
+        private var _value: Any? = NoValue
+
+        fun init(botSystem: BotSystem) {
+            check(value === NoValue) { "Double initialization" }
+            _value = getValue!!.invoke(botSystem)
+            getValue = null
+        }
+
+        @Suppress("UNCHECKED_CAST")
+        override val value: R
+            get() = if (_value === NoValue) error("Not initialized") else _value as R
+    }
 }
 
+/**
+ * Something in which you can retrieve a [value].
+ *
+ * Can also be used as a kotlin property delegate.
+ */
+interface Property<T> {
+
+    val value: T
+
+    @JvmSynthetic
+    @JvmDefault
+    operator fun getValue(thisRef: Any?, property: KProperty<*>): T = value
+}

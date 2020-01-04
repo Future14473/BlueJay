@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.system
 
+import android.support.annotation.CallSuper
 import kotlinx.coroutines.*
 import kotlin.coroutines.coroutineContext
 
@@ -12,16 +13,10 @@ import kotlin.coroutines.coroutineContext
  * @see LinearElement for a variant like LinearOpMode instead (uses blocking, and has a dedicated thread).
  */
 abstract class CoroutineElement(vararg dependsOn: Class<out Element>) :
-    DelegatesElement(*dependsOn, CoroutineScopeElement::class.java), StartableElement {
+    AbstractElement(*dependsOn), StartableElement {
 
+    private val scope: CoroutineScopeElement by botSystem()
     private val startedJob = Job()
-
-    /**
-     * Performs possible additional initialization.
-     *
-     * Disambiguated from [moreInit].
-     */
-    protected open fun moreInit1(botSystem: BotSystem) {}
 
     /**
      * Override this method and place your awesome coroutine code here.
@@ -87,15 +82,20 @@ abstract class CoroutineElement(vararg dependsOn: Class<out Element>) :
         return isActive
     }
 
+    /** Requests to stop the entire system, __not just this element__. To stop just this element, exit [runElement]. */
+    protected fun requestOpModeStop() {
+        scope.cancel("Request stop from CoroutineElement")
+    }
+
     /**
      * Have we started yet?
      * @see waitForStart
      */
     protected val isStarted: Boolean get() = startedJob.isCompleted
 
-    final override fun moreInit(botSystem: BotSystem) {
-        val scope = botSystem.get<CoroutineScopeElement>()
-        moreInit1(botSystem)
+    @CallSuper
+    final override fun init(botSystem: BotSystem) {
+        super.init(botSystem)
         scope.launch {
             runElement()
         }

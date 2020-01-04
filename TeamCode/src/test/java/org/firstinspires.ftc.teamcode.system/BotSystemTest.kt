@@ -11,7 +11,7 @@ class BotSystemTest {
     fun runIt() {
         DebugProbes.install()
         val system = BotSystem(
-            DependsOn(Dependency1::class.java),
+            DependsOn(Dependency1::class),
             LoopAFewTimes(),
             Receive()
         )
@@ -36,15 +36,16 @@ class BotSystemTest {
     }
 }
 
-private class Dependency1 : DelegatesElement() {
+private class Dependency1 : AbstractElement() {
     private val aThing by botSystem(Dependency2::class) { thing }
 
-    override fun moreInit(botSystem: BotSystem) {
+    override fun init(botSystem: BotSystem) {
+        super.init(botSystem)
         println(aThing)
     }
 }
 
-private class Dependency2 : AbstractElement(/*Dependency1::class.java*/) {
+private class Dependency2 : AbstractElement(/*Dependency1::class*/) {
     val thing = 0
     override fun init(botSystem: BotSystem) {
     }
@@ -52,8 +53,6 @@ private class Dependency2 : AbstractElement(/*Dependency1::class.java*/) {
 
 
 private class LoopAFewTimes : LinearElement() {
-    override fun moreInit(botSystem: BotSystem) {
-    }
 
     override fun runElement() {
         repeat(5) {
@@ -65,8 +64,6 @@ private class LoopAFewTimes : LinearElement() {
 
 private class Send : CoroutineElement() {
     val channel = Channel<String>()
-    override fun moreInit1(botSystem: BotSystem) {
-    }
 
     @UseExperimental(ExperimentalCoroutinesApi::class)
     override suspend fun runElement() = coroutineScope<Unit> {
@@ -80,8 +77,6 @@ private class Send : CoroutineElement() {
 
 private class Receive : CoroutineElement() {
     private val send: Send by botSystem()
-    override fun moreInit1(botSystem: BotSystem) {
-    }
 
     override suspend fun runElement() {
         for (s in send.channel) {

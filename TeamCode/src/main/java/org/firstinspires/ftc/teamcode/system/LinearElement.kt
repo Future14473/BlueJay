@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode.system
 
+import android.support.annotation.CallSuper
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import java.util.concurrent.CountDownLatch
-import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 /**
@@ -15,16 +15,10 @@ import java.util.concurrent.Executors
  * @see CoroutineElement for a coroutine variant of this
  */
 abstract class LinearElement(vararg dependsOn: Class<out Element>) :
-    AbstractElement(*dependsOn, CoroutineScopeElement::class.java), StartableElement {
+    AbstractElement(*dependsOn), StartableElement {
 
-    private var executorService: ExecutorService? = null
     private val startedLatch = CountDownLatch(1)
-    private lateinit var scope: CoroutineScopeElement
-
-    /**
-     * Performs possible additional initialization.
-     */
-    protected abstract fun moreInit(botSystem: BotSystem)
+    private val scope: CoroutineScopeElement by botSystem()
 
     /**
      * Override this method and place your code here.
@@ -119,26 +113,23 @@ abstract class LinearElement(vararg dependsOn: Class<out Element>) :
      */
     protected fun isStopRequested(): Boolean = Thread.currentThread().isInterrupted
 
-    /**
-     * Requests to stop the entire op mode.
-     *
-     * Callable from a not-OpMode.
-     */
+    /** Requests to stop the entire system, __not just this element__. To stop just this element, exit [runElement]. */
     protected fun requestOpModeStop() {
         scope.cancel("Request stop from LinearElement")
     }
 
+    @CallSuper
     final override fun init(botSystem: BotSystem) {
-        executorService = Executors.newSingleThreadExecutor()
-        scope = botSystem.get(CoroutineScopeElement::class.java)
-        moreInit(botSystem)
+        super.init(botSystem)
         scope.launch {
-            runInExecutorAndWait(executorService!!) {
-                runElement()
+            val executorService = Executors.newSingleThreadExecutor()
+            try {
+                runInExecutorAndWait(executorService) {
+                    runElement()
+                }
+            } finally {
+                executorService.shutdownNow()
             }
-        }
-        scope.job.invokeOnCompletion {
-            executorService?.shutdownNow()
         }
     }
 

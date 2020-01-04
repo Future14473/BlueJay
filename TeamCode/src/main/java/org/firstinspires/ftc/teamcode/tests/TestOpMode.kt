@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode.tests
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.util.RobotLog
 import org.firstinspires.ftc.teamcode.ftcsystem.BotSystemsOpMode
-import org.firstinspires.ftc.teamcode.system.DelegatesElement
-import org.firstinspires.ftc.teamcode.system.OpModeElement
+import org.firstinspires.ftc.teamcode.ftcsystem.OpModeElement
+import org.firstinspires.ftc.teamcode.system.AbstractElement
 
 @TeleOp
 class TestOpMode : BotSystemsOpMode(Something()) {
@@ -14,7 +14,7 @@ class TestOpMode : BotSystemsOpMode(Something()) {
     }
 }
 
-private class Something : DelegatesElement() {
+private class Something : AbstractElement() {
 
     private val opMode by botSystem(OpModeElement::class) { opMode }
     private val hardwareMap by lazy { opMode.hardwareMap!! }

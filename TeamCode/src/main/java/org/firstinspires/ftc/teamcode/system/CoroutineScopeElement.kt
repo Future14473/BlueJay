@@ -23,8 +23,5 @@ class CoroutineScopeElement
 
     override val coroutineContext = if (context[Job] != null) context else context + Job()
 
-    override fun init(botSystem: BotSystem) {
-    }
-
     val job get() = coroutineContext[Job]!!
 }

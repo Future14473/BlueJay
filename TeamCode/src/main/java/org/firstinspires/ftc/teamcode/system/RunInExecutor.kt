@@ -7,12 +7,7 @@ import kotlinx.coroutines.withContext
 import java.util.concurrent.Callable
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Future
-import java.util.concurrent.atomic.AtomicInteger
-
-
-private const val NOT_RUN = 0
-private const val RUNNING = 1
-private const val CANCELLED_BEFORE_RUN = 1
+import java.util.concurrent.atomic.AtomicBoolean
 
 private class WrappedCancellationException(e: CancellationException) : Throwable(e)
 
@@ -30,10 +25,10 @@ private class WrappedCancellationException(e: CancellationException) : Throwable
  */
 suspend fun <T> runInExecutorAndWait(executor: ExecutorService, callable: Callable<T>): T {
     val deferred = CompletableDeferred<T>() // holds result
-    val runState = AtomicInteger(NOT_RUN) // Handles corner case where cancelled before run.
+    val canRun = AtomicBoolean(true) // Handles corner case where cancelled before run.
     val future = executor.submit {
         try {
-            if (runState.compareAndSet(NOT_RUN, RUNNING))
+            if (canRun.getAndSet(false))
                 deferred.complete(callable.call())
         } catch (e: Throwable) {
             val realE = e.let {
@@ -44,13 +39,11 @@ suspend fun <T> runInExecutorAndWait(executor: ExecutorService, callable: Callab
         }
     }
     try {
-        // If is cancellation exception, will throw as WrappedCancellationException instead.
-        // If wrapped, will unwrap.
         return deferred.await()
     } catch (e: WrappedCancellationException) {
         throw e.cause!!
-    } catch (c: CancellationException) {
-        if (!runState.compareAndSet(NOT_RUN, CANCELLED_BEFORE_RUN)) { // already running
+    } catch (c: CancellationException) { //actual cancellation, not thrown cancellation.
+        if (!canRun.getAndSet(false)) { // already running
             future.cancel(true)
             withContext(NonCancellable) {
                 try {

@@ -5,7 +5,6 @@ import kotlinx.coroutines.launch
 import org.firstinspires.ftc.teamcode.system.BotSystem
 import org.firstinspires.ftc.teamcode.system.CoroutineScopeElement
 import org.firstinspires.ftc.teamcode.system.Element
-import org.firstinspires.ftc.teamcode.system.OpModeElement
 import org.futurerobotics.ftcutils.CoroutineOpMode
 import kotlin.collections.component1
 import kotlin.collections.component2
