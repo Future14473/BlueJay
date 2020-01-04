@@ -36,12 +36,16 @@ class BotSystemTest {
     }
 }
 
-private class Dependency1 : AbstractElement(Dependency2::class.java) {
-    override fun init(botSystem: BotSystem) {
+private class Dependency1 : DelegatesElement() {
+    private val aThing by botSystem.getting(Dependency2::class.java) { thing }
+
+    override fun moreInit(botSystem: BotSystem) {
+        println(aThing)
     }
 }
 
 private class Dependency2 : AbstractElement(/*Dependency1::class.java*/) {
+    val thing = 0
     override fun init(botSystem: BotSystem) {
     }
 }
