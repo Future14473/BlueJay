@@ -3,14 +3,7 @@ package org.firstinspires.ftc.teamcode.imageprocessing;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.opencv.core.Mat;
-import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.openftc.easyopencv.OpenCvInternalCamera;
-import org.openftc.easyopencv.OpenCvPipeline;
-
-import detectors.FoundationPipeline.Pipeline;
+import detectors.OpenCvDetector;
 
 /*
 
@@ -28,35 +21,17 @@ import detectors.FoundationPipeline.Pipeline;
  */
 
 @TeleOp(name = "CV Simulator", group = "Auto")
-public class CVDisplay extends OpMode {
+public class OpenCVDetection extends OpMode {
 
-	OpenCvCamera phoneCam;
-
+	OpenCvDetector fieldElementDetector;
 
 	@Override
 	public void init() {
+
 		telemetry.setAutoClear(true);
-
-		//intit EOCV
-		int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-		phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
-
-		Pipeline.doFoundations = false;
-		Pipeline.doStones = false;
-		Pipeline.doSkyStones = true;
-
-		phoneCam.openCameraDevice();
-
-		phoneCam.setPipeline(new OpenCvPipeline() {
-			@Override
-			public Mat processFrame(Mat input) {
-				//return input;
-				return Pipeline.process(input);
-			}
-		});
-
-		phoneCam.startStreaming(640*1, 480*1, OpenCvCameraRotation.UPRIGHT);
+		fieldElementDetector = new OpenCvDetector(this);
 	}
+
 	/*
 	 * Code to run REPEATEDLY when the driver hits INIT
 	 */
@@ -69,7 +44,7 @@ public class CVDisplay extends OpMode {
 	 */
 	@Override
 	public void start() {
-
+		fieldElementDetector.start();
 	}
 
 	/*
@@ -85,6 +60,6 @@ public class CVDisplay extends OpMode {
 	 */
 	@Override
 	public void stop() {
-
+		fieldElementDetector.stop();
 	}
 }
