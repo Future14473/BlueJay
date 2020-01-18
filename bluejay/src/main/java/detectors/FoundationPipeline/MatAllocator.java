@@ -13,9 +13,8 @@ public class MatAllocator {
 			 return matrices.get(name);
 		} else {
 			matrices.put(name, new Mat());
+			return matrices.get(name);
 		}
-
-		return null;
 	}
 	public static Mat getMat(String name, int rows, int cols, int type){
 		if(matrices.containsKey(name)) {
