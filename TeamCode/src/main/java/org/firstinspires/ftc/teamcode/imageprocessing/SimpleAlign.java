@@ -75,12 +75,17 @@ public class SimpleAlign extends OpMode {
 		int difference = xpos-320;
 
 		//75 pixels ought to be close enough
-		if(Math.abs(difference) > 75) {
-			if(difference > 0) {
-				//Strafe right
-			} else {
-				//Strafe Left
-			}
+		if(Math.abs(difference) < 75) {
+			telemetry.addLine("Aligned to SkyStone!");
+			return;
+		}
+
+		if (difference > 0) {
+			//Strafe right
+			telemetry.addData("Moving","Right");
+		} else {
+			//Strafe Left
+			telemetry.addData("Moving","Left");
 		}
 	}
 

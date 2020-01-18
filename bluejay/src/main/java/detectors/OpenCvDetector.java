@@ -36,10 +36,6 @@ public class OpenCvDetector extends StartStoppable {
 	//OpMode
 	OpMode OpMode;
 
-	private List<Foundation> foundations = new ArrayList<>(); //detected foundations
-	private List<Stone>      stones      = new ArrayList<>();
-	private List<SkyStone>   skyStones   = new ArrayList<>();
-
 	public  OpenCvDetector (OpMode opmode) {
 		OpMode = opmode;
 
@@ -64,9 +60,7 @@ public class OpenCvDetector extends StartStoppable {
 	@Override
 	public void loop() {
 		//will be called repeatedly when detector is active
-		foundations = Pipeline.foundations;
-		stones = Pipeline.stones;
-		skyStones = Pipeline.skyStones;
+
 	}
 
 	@Override
@@ -89,18 +83,18 @@ public class OpenCvDetector extends StartStoppable {
 	public Foundation[] getFoundations() {
 		if (!activated) throw new IllegalStateException("Not activated");
 
-		return foundations.toArray(new Foundation[0]);
+		return Pipeline.foundations.toArray(new Foundation[0]);
 	}
 
 	public Stone[] getStones() {
 		if (!activated) throw new IllegalStateException("Not activated");
 
-		return stones.toArray(new Stone[0]);
+		return Pipeline.stones.toArray(new Stone[0]);
 	}
 
 	public SkyStone[] getSkyStones() {
 		if (!activated) throw new IllegalStateException("Not activated");
 
-		return skyStones.toArray(new SkyStone[0]);
+		return Pipeline.skyStones.toArray(new SkyStone[0]);
 	}
 }
