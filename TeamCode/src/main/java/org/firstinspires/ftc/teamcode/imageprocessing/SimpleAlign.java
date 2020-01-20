@@ -19,7 +19,7 @@ import detectors.OpenCvDetector;
     Enjoy!
 */
 
-@TeleOp(name = "CV Simulator", group = "Auto")
+@TeleOp(name = "CV Align", group = "Auto")
 public class SimpleAlign extends OpMode {
 
 	OpenCvDetector fieldElementDetector;

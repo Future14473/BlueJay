@@ -13,6 +13,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 import org.openftc.easyopencv.OpenCvPipeline;
+import org.openftc.opencvrepackaged.DynamicOpenCvNativeLibLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ public class OpenCvDetector extends StartStoppable {
 
 	//Originally in RobotControllerActivity, but caused the camera shutter to make weird noises, so now it lives here
 	static {
-		//OpenCVLoader.initDebug();
+		//DynamicOpenCvNativeLibLoader.loadNativeLibOnStartRobot();
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 	}
 

@@ -15,20 +15,18 @@ import detectors.OpenCvDetector;
 
     Enjoy!
 
-    Below is the code to display to the RC; thanks DogeCV! I tried easyOpenCV, but it was lagging and stuttering. (??)
-	If it crashes after about a minute, it's probably because OpenCV is using too much native memory. My solution
-	is to call System.gc() whenever it reaches 70% (works on my g4 play) , but if someone knows more please contact me.
+    Below is the code to display to the RC; Thanks, EasyOpenCV!
+	If it crashes after about a minute, it's probably because OpenCV is using too much native memory.
+	That should not happen much because the MatAllocator recycles all Mats (but not MatofInt)
  */
 
-@TeleOp(name = "CV Simulator", group = "Auto")
+@TeleOp(name = "CV test", group = "Auto")
 public class OpenCVDetection extends OpMode {
 
 	OpenCvDetector fieldElementDetector;
 
 	@Override
 	public void init() {
-
-		telemetry.setAutoClear(true);
 		fieldElementDetector = new OpenCvDetector(this);
 	}
 
@@ -52,7 +50,7 @@ public class OpenCVDetection extends OpMode {
 	 */
 	@Override
 	public void loop() {
-		telemetry.update();
+
 	}
 
 	/*
