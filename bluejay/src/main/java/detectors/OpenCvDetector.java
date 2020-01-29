@@ -1,6 +1,7 @@
 package detectors;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
@@ -28,7 +29,7 @@ public class OpenCvDetector extends StartStoppable {
 	//Originally in RobotControllerActivity, but caused the camera shutter to make weird noises, so now it lives here
 	static {
 		//DynamicOpenCvNativeLibLoader.loadNativeLibOnStartRobot();
-		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+		//System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 	}
 
 	//This is a reference to the camera
@@ -51,6 +52,7 @@ public class OpenCvDetector extends StartStoppable {
 		phoneCam.setPipeline(new OpenCvPipeline() {
 			@Override
 			public Mat processFrame(Mat input) {
+				Log.d("ROBOT","RUN_________________");
 				return Pipeline.process(input);
 			}
 		});
@@ -66,6 +68,7 @@ public class OpenCvDetector extends StartStoppable {
 
 	@Override
 	public void begin() {
+		Log.d("ROBOT","BEGIN_________________");
 		phoneCam.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
 	}
 

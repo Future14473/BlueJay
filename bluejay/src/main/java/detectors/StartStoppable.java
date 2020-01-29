@@ -10,11 +10,13 @@ public abstract class StartStoppable {
 	});
 
 	public final void start() {
+		begin();
 		activated = true;
 		loop.start();
 	}
 
 	public final void stop() {
+		end();
 		//yes stop() is deprecated but there is no big penalty for premature death
 		//and suspend is useless as well because each cycle is independent
 		activated = false;

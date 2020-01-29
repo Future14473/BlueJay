@@ -1,0 +1,23 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="org.futurerobotics.bluejay"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="19"
+8-->C:\Users\xchen\Documents\OpenRC-Turbo\bluejay\src\main\AndroidManifest.xml
+9        android:targetSdkVersion="28" />
+9-->C:\Users\xchen\Documents\OpenRC-Turbo\bluejay\src\main\AndroidManifest.xml
+10
+11    <application
+11-->C:\Users\xchen\Documents\OpenRC-Turbo\bluejay\src\main\AndroidManifest.xml:5:5-8:19
+12        android:allowBackup="true"
+12-->C:\Users\xchen\Documents\OpenRC-Turbo\bluejay\src\main\AndroidManifest.xml:5:18-44
+13        android:label="@string/app_name"
+13-->C:\Users\xchen\Documents\OpenRC-Turbo\bluejay\src\main\AndroidManifest.xml:5:45-77
+14        android:supportsRtl="true" >
+14-->C:\Users\xchen\Documents\OpenRC-Turbo\bluejay\src\main\AndroidManifest.xml:6:9-35
+15    </application>
+16
+17</manifest>
