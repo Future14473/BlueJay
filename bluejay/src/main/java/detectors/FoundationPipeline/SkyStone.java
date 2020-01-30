@@ -21,7 +21,7 @@ public class SkyStone extends Stone {
 		Size s = rr.size;
 		double ratio = Imgproc.contourArea(shape)/(s.width*s.height);
 		//System.out.println(ratio);
-		if(ratio<0.75) isBastard=true;
+		if(ratio<0.4) isBastard=true;
 	}
 
 	public void draw(Mat canvas) {

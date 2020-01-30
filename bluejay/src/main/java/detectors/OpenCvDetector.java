@@ -1,23 +1,15 @@
 package detectors;
 
-import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.opencv.android.Utils;
-import org.opencv.core.Core;
-import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 import org.openftc.easyopencv.OpenCvPipeline;
-import org.openftc.opencvrepackaged.DynamicOpenCvNativeLibLoader;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import detectors.FoundationPipeline.Foundation;
 import detectors.FoundationPipeline.Pipeline;
@@ -36,15 +28,19 @@ public class OpenCvDetector extends StartStoppable {
 	private OpenCvCamera phoneCam;
 
 	//OpMode
-	OpMode OpMode;
+	com.qualcomm.robotcore.eventloop.opmode.OpMode OpMode;
 
-	public  OpenCvDetector (OpMode opmode) {
+	public OpenCvDetector (com.qualcomm.robotcore.eventloop.opmode.OpMode opMode){
+		this(opMode, true);
+	}
+
+	public  OpenCvDetector (com.qualcomm.robotcore.eventloop.opmode.OpMode opmode, boolean showVideo) {
 		OpMode = opmode;
 
 		//init EOCV
 		int cameraMonitorViewId = OpMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", OpMode.hardwareMap.appContext.getPackageName());
-		phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
-
+		if(showVideo) phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
+		else phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK);
 		Pipeline.doFoundations = false;
 		Pipeline.doStones = false;
 		Pipeline.doSkyStones = true;
@@ -66,12 +62,14 @@ public class OpenCvDetector extends StartStoppable {
 
 	}
 
+	//will be called when detector is activated
 	@Override
 	public void begin() {
 		Log.d("ROBOT","BEGIN_________________");
 		phoneCam.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
 	}
 
+	//will be called when detector is ended
 	@Override
 	public void end() {
 		phoneCam.stopStreaming();

@@ -1,5 +1,6 @@
 package detectors.FoundationPipeline;
 
+import android.os.Debug;
 import android.util.Log;
 
 import org.opencv.core.Core;
@@ -13,9 +14,6 @@ import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class Pipeline {
 
@@ -37,21 +35,34 @@ public class Pipeline {
 	public static Mat process(Mat source0){
 		Log.d("DATA IN",source0.width()+" "+source0.height()+" "+source0.channels());
 
-		if(FtcRobotControllerActivity.PercentAvailable<FtcRobotControllerActivity.LOW_MEMORY_THRESHOLD_PERCENT){
+		//Garbage Collection
+		double used = Debug.getNativeHeapAllocatedSize();
+		double total = Debug.getNativeHeapSize();
+		double PercentAvailable = 100f * (1f - ((float) used / total ));
+		if(PercentAvailable < 30){
 			System.gc();
 			Log.d("MEM ____________","CLEAR - - - - - - ");
 		}
+
+		//Native Recycle
 		MatAllocator.emptyAll();
 
-		//compute.clockwise(source0);
+		//Rotate
+		Mat flip = new Mat(480, 640, source0.type());
+		Core.transpose(source0, flip);
+		Core.flip(flip, flip, 1);
 
-		Mat out = processInternal(source0);
+		//Process image
+		Mat out = processInternal(flip);
 
-		//compute.counterCLockwise(source0);
+		//Rotate Back
+		Mat ret = new Mat(640, 480, out.type());
+		Core.transpose(out, ret);
+		Core.flip(ret, ret, 0);
 
-		Log.d("DATA OUT",out.width()+" "+out.height()+" "+out.channels());
+		Log.d("DATA OUT",ret.width()+" "+ret.height()+" "+ret.channels());
 
-		return out;
+		return ret;
 	}
 
 	/**
