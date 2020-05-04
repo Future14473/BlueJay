@@ -14,7 +14,6 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 public class Processing {
-	//considering that white balls are always whiter than anything else (field, walls etc) the standoutness can be really high
 	enum channel{
 		HUE,
 		SATURATION,
@@ -170,6 +169,6 @@ public class Processing {
 	
 	void end() {
 		HighGui.waitKey(0);
-		System.exit(420);
+		System.exit(0);
 	}
 }

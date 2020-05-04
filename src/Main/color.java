@@ -3,6 +3,8 @@ package Main;
 import org.opencv.core.Scalar;
 
 public enum color {
+    //considering that white balls are always whiter than anything else (field, walls etc) the standoutness can be really high
+
     YELLOW(20, 255, -1, -6, new Scalar(0,50,130), new Scalar(255, 255, 255), new Scalar(30, 100, 100)),//soft thresh targets
     RED(180, 255, -1, -80, new Scalar(0, 50, 130), new Scalar(255, 255, 255), new Scalar(30, 100, 100)),
     BLUE(120, 150, -1, -80, new Scalar(0, 50, 80), new Scalar(255, 255, 255), new Scalar(30, 100, 100)),

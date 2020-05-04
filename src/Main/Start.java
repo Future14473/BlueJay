@@ -14,7 +14,7 @@ public class Start {
 			
 			processing.display(input, "input");
 			
-		//find a continuous solid Main.color shape
+		//find a continuous solid color shape
 		var blobs = processing.ColorBlobSearch(input.clone(), color.YELLOW);
 
 		//divide this shape into sub chunks
