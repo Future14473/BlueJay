@@ -1,6 +1,6 @@
 # BLUEJAY 2.0
 ## FTC Image Processing
-![Blue](Images/banner.png)
+![Blue](Images/Banner.png)
 Brand-new BlueJay, more robust and more generalized!
 - Use it for any past or future competition
 - Build your own processing algorithm
