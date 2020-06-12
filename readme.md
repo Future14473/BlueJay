@@ -6,7 +6,7 @@ Brand-new BlueJay, more robust and more generalized!
 - Build your own processing algorithm
 
 
-See releases for the Skystone-specific 2019 BlueJay
+**See releases for the polished Skystone-specific 2019 BlueJay**
 
 Pardon the lack of README and resources. Still working on speed, stability, porting to android, etc.
 
