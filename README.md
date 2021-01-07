@@ -1,5 +1,5 @@
 ![Blue](Gallery/BlueJaylogo.png)
-# FTC Team #14473 Future - Image processing Framework [Currently in Intense Development]
+# FTC Team #14473 Future - Image processing Framework
 
 <img src="Gallery/sample.png" alt="Kitten"
 	title="A cute kitten" width="550" height="300" />
